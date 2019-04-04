@@ -6,7 +6,6 @@ import "semantic-ui-css/semantic.min.css";
 import {
   Button,
   Container,
-  Divider,
   Grid,
   Header,
   Icon,
@@ -23,10 +22,12 @@ import {
 import "./css/Homepage.css";
 
 import logo from "../static/img/genie_logo.png";
-import synergy_logo from "../static/img/synergylog_noletter_trans.png"
-import mesl_logo from "../static/img/mesllogo_noletter_trans.png"
-import cse_logo from "../static/img/CSELogo_globe_color_trans.png"
-import ucsd_logo from "../static/img/ucsd-logo.png"
+import synergy_logo from "../static/img/synergylog_noletter_trans.png";
+import mesl_logo from "../static/img/mesllogo_noletter_trans.png";
+import cse_logo from "../static/img/CSELogo_globe_color_trans.png";
+import ucsd_logo from "../static/img/ucsd-logo.png";
+
+import Contact from "./Contactpage";
 
 /* eslint-disable react/no-multi-comp */
 /* Heads up! HomepageHeading uses inline styling, however it's not the best practice. Use CSS or styled components for
@@ -83,10 +84,16 @@ class DesktopContainer extends Component {
   hideFixedMenu = () => this.setState({ fixed: false });
   showFixedMenu = () => this.setState({ fixed: true });
 
+  showContactPage = () => this.setState({ contact: true });
+
   render() {
     const { children } = this.props;
-    const { fixed } = this.state;
-
+    const { fixed, contact } = this.state;
+    if(contact) {
+      return (
+        <Contact handleOpen />
+      );
+    }
     return (
       <Responsive minWidth={Responsive.onlyTablet.minWidth} >
         <Visibility
@@ -108,14 +115,14 @@ class DesktopContainer extends Component {
               secondary={!fixed}
               size="large"
               style={{
-                "border-width": 0
+                borderWidth: 0
               }}
             >
               <Container>
                 <Menu.Item as="a" active>
                   Home
                 </Menu.Item>
-                <Menu.Item as="a">
+                <Menu.Item as="a" onClick={this.showContactPage}>
                   Contact
                 </Menu.Item>
                 <Menu.Item as="a">
