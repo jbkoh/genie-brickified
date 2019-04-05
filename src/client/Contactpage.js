@@ -9,21 +9,24 @@ export default class Contact extends Component {
   handleClose = () => this.setState({ modalOpen: false })
 
   render() {
-    this.setState({ modalOpen: true });
     return (
       <Modal
-        open={this.state.modalOpen}
-        onClose={this.handleClose}
+        dimmer={true}
+        open={this.props.open}
+        onClose={this.props.onClose}
         basic
         size='small'
       >
-        <Header icon='address book' content='Contact' />
+        <Header icon='address book' content='Contact Us' />
         <Modal.Content>
-          <h3>For any questions or issues, please email <a href="mailto:jbkoh@eng.ucsd.edu">us</a>.</h3>
+          <h3>For any questions or issues, please <a href="mailto:jbkoh@eng.ucsd.edu" style={{color: 'chartreuse'}}>email us</a>.</h3>
         </Modal.Content>
         <Modal.Actions>
-          <Button color='green' onClick={this.handleClose} inverted>
+          <Button color='white' onClick={this.props.onClose} inverted>
             <Icon name='checkmark' /> Close
+          </Button>
+          <Button color='green' href="mailto:jbkoh@eng.ucsd.edu" onClick={this.props.onClose} inverted>
+            Contact <Icon name='right arrow' />
           </Button>
         </Modal.Actions>
       </Modal>

@@ -70,6 +70,60 @@ const HomepageHeading = ({ mobile }) => (
   </Container>
 );
 
+const Aboutpage = ({ mobile }) => (
+  <Container text >
+    <Header
+      as="h1"
+      inverted
+      style={{
+        marginTop: mobile ? "1em" : "2em",
+      }}
+    >
+      <Image src={logo} style={{
+        width: mobile ? "1.5em" : "3em",
+        height: mobile ? "1.5em" : "3em",
+      }} />
+      <Header.Content style={{
+          fontSize: mobile ? "1.5em" : "3em",
+          fontWeight: "normal"
+        }}>Genie
+      </Header.Content>
+    </Header>
+    <Header
+      as="h2"
+      content="About this project"
+      inverted
+      style={{
+        fontSize: mobile ? "1em" : "2em",
+        fontWeight: "normal"
+      }}
+    />
+    <Header
+      as="h2"
+      content="Genie is a project of the MESL/Synergy Lab at UCSD. 
+      Genie assists occupants of the Computer Science and Engineering 
+      building to improve their environment. You can use it to change 
+      your temperature settings, set your schedule and turn HVAC on/off 
+      when you need. You can also view history of sensor measurements, 
+      and send us your feedback using this interface. The goal of this 
+      project is to make HVAC energy efficient while meeting the comfort
+       requirements of the occupant. Please use Genie, feel free to send 
+       us your suggestions, feedback or maintenance requests, and improve your environment!
+      "
+      inverted
+      style={{
+        marginTop: mobile ? "0.5em" : "1em",
+        marginBottom: mobile ? "1em" : "2em",
+        fontSize: mobile ? "10px" : "20px",
+        fontWeight: "normal"
+      }}
+    />
+    <Button href="https://genie.ucsd.edu/tips" basic inverted size="huge">
+      How HVAC works
+    </Button>
+  </Container>
+);
+
 HomepageHeading.propTypes = {
   mobile: PropTypes.bool
 };
@@ -88,12 +142,8 @@ class DesktopContainer extends Component {
 
   render() {
     const { children } = this.props;
-    const { fixed, contact } = this.state;
-    if(contact) {
-      return (
-        <Contact handleOpen />
-      );
-    }
+    const { fixed, contact, about } = this.state;
+
     return (
       <Responsive minWidth={Responsive.onlyTablet.minWidth} >
         <Visibility
@@ -122,10 +172,10 @@ class DesktopContainer extends Component {
                 <Menu.Item as="a" active>
                   Home
                 </Menu.Item>
-                <Menu.Item as="a" onClick={this.showContactPage}>
+                <Menu.Item as="a" onClick={() => this.setState({contact: true})}>
                   Contact
                 </Menu.Item>
-                <Menu.Item as="a">
+                <Menu.Item as="a" onClick={() => this.setState({about: true})}>
                   About
                 </Menu.Item>
                 <Menu.Item position="right">
@@ -143,11 +193,11 @@ class DesktopContainer extends Component {
                 </Menu.Item>
               </Container>
             </Menu>
-            <HomepageHeading />
+            <Aboutpage className="float" />
           </Segment>
         </Visibility>
-
         {children}
+        <Contact open={contact} onClose={() => this.setState({contact: false})} />
       </Responsive>
 
     );

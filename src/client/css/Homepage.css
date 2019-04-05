@@ -65,3 +65,24 @@ blockquote cite:after {
   position: relative;
 }
 
+/*---------------
+    Animation
+----------------*/
+@keyframes floatBubble{
+  0% {
+    top:0;
+    -webkit-animation-timing-function: ease-in;
+  }
+
+  100% {
+    top: 500px;
+    animation-timing-function: ease-out;
+  }
+ }
+
+.ui.float.container{
+  position: relative;
+  animation: floatBubble 2s inifnate;
+  animation-direction: normal;
+}
+

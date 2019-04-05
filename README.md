@@ -34,6 +34,14 @@
 
 ### Execution
 
+0. Installs the dependencies and development dependencies
+
+    ```
+    npm install
+    ```
+
+    This command will install the dependencies and development dependencies inside package.json, and package-lock.json is the cache file which generated during the build.
+
 1. Runs the app in the development mode.
 
     ```
