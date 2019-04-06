@@ -70,7 +70,7 @@ const HomepageHeading = ({ mobile }) => (
   </Container>
 );
 
-const Aboutpage = ({ mobile }) => (
+const AboutpageHeading = ({ mobile }) => (
   <Container text >
     <Header
       as="h1"
@@ -133,7 +133,7 @@ HomepageHeading.propTypes = {
  * It can be more complicated, but you can create really flexible markup.
  */
 class DesktopContainer extends Component {
-  state = {};
+  state = {activeItem: "home"};
 
   hideFixedMenu = () => this.setState({ fixed: false });
   showFixedMenu = () => this.setState({ fixed: true });
@@ -142,7 +142,8 @@ class DesktopContainer extends Component {
 
   render() {
     const { children } = this.props;
-    const { fixed, contact, about } = this.state;
+    const { fixed, contact, about, activeItem } = this.state;
+    const heading = (this.state.about) ? <AboutpageHeading /> : <HomepageHeading />;
 
     return (
       <Responsive minWidth={Responsive.onlyTablet.minWidth} >
@@ -169,13 +170,13 @@ class DesktopContainer extends Component {
               }}
             >
               <Container>
-                <Menu.Item as="a" active>
+                <Menu.Item name="home" as="a" onClick={() => this.setState({about: false, activeItem: "home"})} active={activeItem === "home"}>
                   Home
                 </Menu.Item>
-                <Menu.Item as="a" onClick={() => this.setState({contact: true})}>
+                <Menu.Item name="contact" as="a" onClick={() => this.setState({contact: true, about: false, activeItem: "contact"})} active={activeItem === "contact"}>
                   Contact
                 </Menu.Item>
-                <Menu.Item as="a" onClick={() => this.setState({about: true})}>
+                <Menu.Item name="about" as="a" onClick={() => this.setState({about: true, activeItem: "about"})} active={activeItem === "about"}>
                   About
                 </Menu.Item>
                 <Menu.Item position="right">
@@ -193,11 +194,11 @@ class DesktopContainer extends Component {
                 </Menu.Item>
               </Container>
             </Menu>
-            <Aboutpage className="float" />
+            {heading}
           </Segment>
         </Visibility>
         {children}
-        <Contact open={contact} onClose={() => this.setState({contact: false})} />
+        <Contact open={contact} onClose={() => this.setState({contact: false, about: false})} />
       </Responsive>
 
     );
