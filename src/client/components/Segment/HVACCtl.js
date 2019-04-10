@@ -4,7 +4,7 @@ import './Segment.css';
 import Slider from 'react-input-slider';
 
 const SegmentObject = ({icon, color, title, value, label, handleChangeTemp}) => (
-    <Segment raised style={{height: "204px"}} >
+    <Segment className={"glowfloat"} raised style={{height: "204px"}} >
         <Grid>
             <Grid.Row>
                 <Grid.Column width={6} style={{
@@ -59,7 +59,7 @@ const SegmentObject = ({icon, color, title, value, label, handleChangeTemp}) => 
 );
 
 const SwitchObject = ({icon, color, title, value, toggleStatus}) => (
-    <Segment raised style={{height: "204px"}}>
+    <Segment className={"glowfloat"} raised style={{height: "204px"}}>
         <Grid>
             <Grid.Row>
                 <Grid.Column width={6} style={{

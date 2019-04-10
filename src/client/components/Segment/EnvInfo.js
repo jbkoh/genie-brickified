@@ -4,7 +4,7 @@ import './Segment.css';
 import Bar from 'react-meter-bar';
 
 const SegmentObject = ({icon, color, title, value, label, labels, progress}) => (
-    <Segment raised style={{height: "204px"}} >
+    <Segment className={"pulse"} raised style={{height: "204px"}} >
         <Grid>
             <Grid.Row>
                 <Grid.Column width={6} style={{
