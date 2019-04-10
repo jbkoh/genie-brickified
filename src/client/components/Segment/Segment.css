@@ -1,51 +1,8 @@
-.ui.gradient1.card {
-    margin-bottom: 24px;
-    background-color: #623fb8;
-    background-image: -webkit-gradient(linear,left top,right top,from(#623fb8),to(#1a8ed1));
-    background-image: -webkit-linear-gradient(left,#623fb8,#1a8ed1);
-    height: 204px;
-}
-
-.ui.gradient2.card {
-    margin-bottom: 24px;
-    background-color: #46b05b;
-    background-image: -webkit-gradient(linear,left top,right top,from(#46b05b),to(#0abac1));
-    background-image: -webkit-linear-gradient(left,#46b05b,#0abac1);
-    height: 204px;
-}
-
-.ui.location.card {
-    position: relative;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    opacity: .6;
-    height: 432px !important; 
-    margin-bottom: 24px;
-}
-
-h1 {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    padding-bottom: 30px;
-    padding-left: 40px;
-    color: #fff;
-    font-family: "Ubuntu", sans-serif;
-    font-size: 3em;
-}
-
 .ui.header {
     font-size: 16px !important;
     font-family: Poppins,sans-serif;
     font-weight: normal;
     color: #666;
-}
-
-@font-face {
-    font-family: 'DS-DIGII';
-    src: url('../../static/fonts/DS-DIGII.TTF');
 }
 
 /* devanagari */

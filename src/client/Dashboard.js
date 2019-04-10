@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { Card, Grid, Icon } from 'semantic-ui-react';
+import { Card, Grid, Icon, Header, Divider } from 'semantic-ui-react';
 import ebu3b from '../static/img/EBU3B.jpg';
 import './css/Dashboard.css';
 import Clock from 'react-live-clock';
+import EnvInfo from './components/Segment/EnvInfo';
+import HVACCtl from './components/Segment/HVACCtl';
 
 class Dashboard extends Component {
 
@@ -10,7 +12,20 @@ class Dashboard extends Component {
     return (
       <Grid>
         <Grid.Row>
+            <Grid.Column width={8} >
+                <EnvInfo title={"Environment Information"} />
+            </Grid.Column>
+            <Grid.Column width={8} >
+                <HVACCtl title={"HVAC Control"} />
+            </Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
           <Grid.Column width={6}>
+            <Divider horizontal style={{ paddingBottom: "28px" }} >
+                <Header as='h3'>
+                    {"Time & Date, and Weather"}
+                </Header>
+            </Divider>
             <Card color='red' className={"gradient1"} >
                 <Grid>
                     <Grid.Row>
@@ -27,7 +42,7 @@ class Dashboard extends Component {
                             </Grid.Row>
                         </Grid.Column>
                         <Grid.Column width={10} style={{
-                            textAlign: "center",
+                            textAlign: "left",
                             marginTop: 0
                         }} >
                             <Grid.Row style={{
@@ -86,7 +101,7 @@ class Dashboard extends Component {
                             </Grid.Row>
                         </Grid.Column>
                         <Grid.Column width={10} style={{
-                            textAlign: "center",
+                            textAlign: "left",
                             marginTop: 0
                         }} >
                             <Grid.Row style={{
@@ -121,6 +136,11 @@ class Dashboard extends Component {
             </Card>
           </Grid.Column>
           <Grid.Column width={10}>
+            <Divider horizontal style={{ paddingBottom: "28px" }} >
+                <Header as='h3'>
+                    {"Location"}
+                </Header>
+            </Divider>
             <Card color='orange' className={"location"} style={{
                 backgroundImage: 'linear-gradient(to bottom right, rgba(0, 47, 75, 0.6), rgba(220, 66, 37, 0.6)), url('+ebu3b+')',
                 backgroundSize: 'cover'

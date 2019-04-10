@@ -9,7 +9,7 @@
 
 .ui.vertical.menu {
   width: 100% !important;
-  font-family: "Lato,'Helvetica Neue',Arial,Helvetica,sans-serif"; }
+  font-family: "Ubuntu", sans-serif; }
   .ui.vertical.menu .item {
     color: #4a4a4a !important;
     text-align: left !important;
