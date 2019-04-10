@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Icon, Header, Segment, Divider, Statistic, Radio, Button } from 'semantic-ui-react';
+import { Grid, Icon, Header, Segment, Divider, Statistic, Button } from 'semantic-ui-react';
 import './Segment.css';
 import Slider from 'react-input-slider';
 

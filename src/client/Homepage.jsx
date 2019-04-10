@@ -146,7 +146,7 @@ class DesktopContainer extends Component {
   render() {
     const { children } = this.props;
     const { fixed, contact, about, activeItem } = this.state;
-    const heading = (this.state.about) ? <AboutpageHeading /> : <HomepageHeading />;
+    const heading = (about) ? <AboutpageHeading /> : <HomepageHeading />;
 
     return (
       <Responsive minWidth={Responsive.onlyTablet.minWidth} >

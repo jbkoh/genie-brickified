@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-import { Menu, Icon, Dropdown } from 'semantic-ui-react';
+import { Menu, Icon } from 'semantic-ui-react';
 import MyMenu from './MyMenu';
 import './TopMenu.css';
 
