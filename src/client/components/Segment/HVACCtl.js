@@ -26,7 +26,7 @@ const SegmentObject = ({icon, color, title, value, label, handleChangeTemp}) => 
                     <Grid.Row style={{
                         marginTop: 40,
                     }} >
-                        <Header>{title}</Header>
+                        <Header className="segtitle">{title}</Header>
                     </Grid.Row>
                     <Grid.Row style={{
                         marginTop: 15,
@@ -80,7 +80,7 @@ const SwitchObject = ({icon, color, title, value, toggleStatus}) => (
                     <Grid.Row style={{
                         marginTop: 40,
                     }} >
-                        <Header>{title}</Header>
+                        <Header className="segtitle">{title}</Header>
                     </Grid.Row>
                     <Grid.Row style={{
                         marginTop: 15,
@@ -95,7 +95,7 @@ const SwitchObject = ({icon, color, title, value, toggleStatus}) => (
                         marginTop: 20,
                     }} >
                       <Statistic size="small" horizontal floated={"left"}>  
-                        <Header style={{marginRight: 20}}>Current<span><br /></span>Status:</Header><Statistic.Value>{value}</Statistic.Value>
+                        <Header className="segtitle" style={{marginRight: 20}}>Current<span><br /></span>Status:</Header><Statistic.Value>{value}</Statistic.Value>
                       </Statistic>
                     </Grid.Row>
                 </Grid.Column>
@@ -131,7 +131,7 @@ class SegmentComponent extends Component {
         <Grid>
             <Grid.Row>
                 <Divider horizontal style={{ marginLeft: "15px", marginRight: "15px" }} >
-                    <Header as='h3'>
+                    <Header className="segtitle" as='h3'>
                         {this.props.title}
                     </Header>
                 </Divider>

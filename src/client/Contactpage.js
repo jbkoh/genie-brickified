@@ -22,7 +22,7 @@ export default class Contact extends Component {
           <h3>For any questions or issues, please <a href="mailto:jbkoh@eng.ucsd.edu" style={{color: 'chartreuse'}}>email us</a>.</h3>
         </Modal.Content>
         <Modal.Actions>
-          <Button color='white' onClick={this.props.onClose} inverted>
+          <Button onClick={this.props.onClose} inverted>
             <Icon name='checkmark' /> Close
           </Button>
           <Button color='green' href="mailto:jbkoh@eng.ucsd.edu" onClick={this.props.onClose} inverted>

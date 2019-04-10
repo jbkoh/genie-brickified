@@ -22,7 +22,7 @@ class Dashboard extends Component {
         <Grid.Row>
           <Grid.Column width={6}>
             <Divider horizontal style={{ paddingBottom: "28px" }} >
-                <Header as='h3'>
+                <Header as='h3' className="dashboard">
                     {"Time & Date, and Weather"}
                 </Header>
             </Divider>
@@ -137,7 +137,7 @@ class Dashboard extends Component {
           </Grid.Column>
           <Grid.Column width={10}>
             <Divider horizontal style={{ paddingBottom: "28px" }} >
-                <Header as='h3'>
+                <Header as='h3' className="dashboard">
                     {"Location"}
                 </Header>
             </Divider>
@@ -145,7 +145,7 @@ class Dashboard extends Component {
                 backgroundImage: 'linear-gradient(to bottom right, rgba(0, 47, 75, 0.6), rgba(220, 66, 37, 0.6)), url('+ebu3b+')',
                 backgroundSize: 'cover'
             }}>
-                <h1>UCSD/Main/EBU3B/2150</h1>
+                <Header className="head">UCSD/Main/EBU3B/2150</Header>
             </Card>
           </Grid.Column>
         </Grid.Row>

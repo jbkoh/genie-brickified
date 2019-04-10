@@ -26,7 +26,7 @@ const SegmentObject = ({icon, color, title, value, label, labels, progress}) => 
                     <Grid.Row style={{
                         marginTop: 40,
                     }} >
-                        <Header>{title}</Header>
+                        <Header className="segtitle">{title}</Header>
                     </Grid.Row>
                     <Grid.Row style={{
                         marginTop: 15,
@@ -61,7 +61,7 @@ class SegmentComponent extends Component {
         <Grid>
             <Grid.Row>
                 <Divider horizontal style={{ marginLeft: "15px", marginRight: "15px" }} >
-                    <Header as='h3'>
+                    <Header as='h3' className="segtitle">
                         {this.props.title}
                     </Header>
                 </Divider>

@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 import "semantic-ui-css/semantic.min.css";
 
@@ -16,7 +17,7 @@ import {
   Segment,
   Sidebar,
   Visibility,
-  Label,
+  Card
 } from "semantic-ui-react";
 
 import "./css/Homepage.css";
@@ -63,10 +64,12 @@ const HomepageHeading = ({ mobile }) => (
         fontWeight: "normal"
       }}
     />
-    <Button basic inverted size="huge">
-      Get Started
-      <Icon name="right arrow" />
-    </Button>
+    <Link to={"/main"}>
+      <Button basic inverted size="huge">
+        Get Started
+        <Icon name="right arrow" />
+      </Button>
+    </Link>
   </Container>
 );
 
@@ -294,111 +297,127 @@ ResponsiveContainer.propTypes = {
   children: PropTypes.node
 };
 
-const HomepageLayout = () => (
-  <ResponsiveContainer>
-    <Segment style={{ padding: "8em 0em" }} vertical>
-      <Grid container stackable verticalAlign="middle">
-        <Grid.Row>
-          <Grid.Column width={8}>
-            <header style={{ fontSize: "2em", 
-            fontFamily: "Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",
-            fontWeight: "normal",
-            color: "rgba(0,0,0,.87)",
-            paddingBottom: "16px"}}>
-              Related Organizations
-            </header>
-            <Image.Group>
-              <a href="http://synergy.ucsd.edu/">
-                <Image circular bordered src={synergy_logo} style={{height: "120px",width: "120px",}} />
-              </a>
-              <a href="http://synergy.ucsd.edu/">
-                <Image circular bordered src={mesl_logo} style={{height: "120px",width: "120px",}} />
-              </a>
-              <a href="http://cse.ucsd.edu/">
-                <Image circular bordered src={cse_logo} style={{height: "120px",width: "120px",}} />
-              </a>
-              <a href="http://ucsd.edu/">
-                <Image circular bordered src={ucsd_logo} style={{height: "120px",width: "120px",}} />
-              </a>
-            </Image.Group>
-            <Label.Group>
-              <a href="http://synergy.ucsd.edu/">
-                <Label style={{width: 110, marginRight: 7.5, marginLeft: 7.5, textAlign: "center", 
-            fontFamily: "Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",}} content="SYNERGY" />
-              </a>
-              <a href="http://synergy.ucsd.edu/">
-                <Label style={{width: 110, marginRight: 7.5, marginLeft: 7.5, textAlign: "center", 
-            fontFamily: "Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",}} content="MESL" />
-              </a>
-              <a href="http://cse.ucsd.edu/">
-                <Label style={{width: 110, marginRight: 7.5, marginLeft: 7.5, textAlign: "center", 
-            fontFamily: "Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",}} content="UCSD CSE" />
-              </a>
-              <a href="http://ucsd.edu/">
-                <Label style={{width: 110, marginRight: 7.5, marginLeft: 7.5, textAlign: "center", 
-            fontFamily: "Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",}} content="UC San Diego" />
-              </a>
-            </Label.Group>
-          </Grid.Column>
-          <Grid.Column floated="right" width={8}>
-            <header style={{ fontSize: "2em", 
-            fontFamily: "Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",
-            fontWeight: "normal",
-            color: "rgba(0,0,0,.87)",
-            paddingBottom: "16px"}}>
-              Related Sites
-            </header>
-            <List style={{ fontSize: "1.33em",
-            fontFamily: "Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",
-            fontWeight: "normal", }}>
-              <List.Item>
-                <a href='https://facilities.ucsd.edu/default.htm'>
-                  Facilities Information System
-                </a>
-              </List.Item>
-              <List.Item>
-                <a href='http://172.21.59.229/Ion/'>
-                  ION Energy Monitoring System
-                </a>
-                </List.Item>
-              <List.Item>
-                <a href='http://energy.ucsd.edu/'>
-                  Energy Dashboard
-                </a>
-              </List.Item>
-              <List.Item>
-                <a href='https://genie.ucsd.edu/'>
-                  Genie - Personal Environment Control
-                </a>
-              </List.Item>
-              <List.Item>
-                <a href='https://brickschema.org/'>
-                  Brick Schema
-                </a>
-              </List.Item>
-            </List>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-    </Segment>
-    <Segment inverted vertical textAlign="center" style={{ padding: "5em 0em" }} className="masthead bg14">
-      <Container>
-        <Header as="h4" inverted
-        style={{
-          fontFamily: "Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",
-          fontWeight: "normal",
-        }}>
-          UC San Diego 9500 Gilman Dr. La Jolla, CA 92093 ©2013 Regents of the University of California. All rights reserved.
-        </Header>
-        <Header as="h4" inverted
-        style={{
-          fontFamily: "Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",
-          fontWeight: "normal",
-        }}>
-          Designed and built by synergy team, based on django and bootstrap        </Header>
-      </Container>
-    </Segment>
-  </ResponsiveContainer>
-);
+class HomepageLayout extends Component {
+  render() {
+    return(
+      <ResponsiveContainer>
+        <Segment style={{ padding: "8em 0em" }} vertical>
+          <Grid container stackable verticalAlign="middle">
+            <Grid.Row>
+              <Grid.Column width={8}>
+                <header style={{ fontSize: "2em", 
+                fontFamily: "Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",
+                fontWeight: "normal",
+                color: "rgba(0,0,0,.87)",
+                paddingBottom: "16px"}}>
+                  Related Organizations
+                </header>
+                <Grid>
+                  <Grid.Row>
+                    <Grid.Column width={4}>
+                      <a href="http://synergy.ucsd.edu/">
+                        <Card
+                          className={"hover"}
+                          image={synergy_logo}
+                          meta='SYNERGY'
+                          style={{textAlign: "center"}}
+                        />
+                      </a>
+                    </Grid.Column>
+                    <Grid.Column width={4}>
+                      <a href="http://synergy.ucsd.edu/">
+                        <Card
+                          className={"hover"}
+                          image={mesl_logo}
+                          meta='MESL'
+                          style={{textAlign: "center"}}
+                        />
+                      </a>
+                    </Grid.Column>
+                    <Grid.Column width={4}>
+                      <a href="http://cse.ucsd.edu/">
+                        <Card
+                          className={"hover"}
+                          image={cse_logo}
+                          meta='UCSD CSE'
+                          style={{textAlign: "center"}}
+                        />
+                      </a>
+                    </Grid.Column>
+                    <Grid.Column width={4}>
+                      <a href="http://ucsd.edu/">
+                        <Card
+                          className={"hover"}
+                          image={ucsd_logo}
+                          meta='UC San Diego'
+                          style={{textAlign: "center", backgroundColor: "white"}}
+                        />
+                      </a>
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
+              </Grid.Column>
+              <Grid.Column floated="right" width={8}>
+                <header style={{ fontSize: "2em", 
+                fontFamily: "Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",
+                fontWeight: "normal",
+                color: "rgba(0,0,0,.87)",
+                paddingBottom: "16px"}}>
+                  Related Sites
+                </header>
+                <List style={{ fontSize: "1.33em",
+                fontFamily: "Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",
+                fontWeight: "normal", }}>
+                  <List.Item>
+                    <a href='https://facilities.ucsd.edu/default.htm'>
+                      Facilities Information System
+                    </a>
+                  </List.Item>
+                  <List.Item>
+                    <a href='http://172.21.59.229/Ion/'>
+                      ION Energy Monitoring System
+                    </a>
+                    </List.Item>
+                  <List.Item>
+                    <a href='http://energy.ucsd.edu/'>
+                      Energy Dashboard
+                    </a>
+                  </List.Item>
+                  <List.Item>
+                    <a href='https://genie.ucsd.edu/'>
+                      Genie - Personal Environment Control
+                    </a>
+                  </List.Item>
+                  <List.Item>
+                    <a href='https://brickschema.org/'>
+                      Brick Schema
+                    </a>
+                  </List.Item>
+                </List>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Segment>
+        <Segment inverted vertical textAlign="center" style={{ padding: "5em 0em" }} className="masthead bg14">
+          <Container>
+            <Header as="h4" inverted
+            style={{
+              fontFamily: "Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",
+              fontWeight: "normal",
+            }}>
+              UC San Diego 9500 Gilman Dr. La Jolla, CA 92093 ©2013 Regents of the University of California. All rights reserved.
+            </Header>
+            <Header as="h4" inverted
+            style={{
+              fontFamily: "Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",
+              fontWeight: "normal",
+            }}>
+              Designed and built by synergy team, based on django and bootstrap        </Header>
+          </Container>
+        </Segment>
+      </ResponsiveContainer>
+    );
+  }
+}
 
 export default HomepageLayout;
