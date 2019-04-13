@@ -1,0 +1,16 @@
+.ui.search.segment {
+    min-height: 204px
+}
+
+.ui.searchdashboard.header {
+    font-size: 16px !important;
+    font-family: Poppins,sans-serif;
+    font-weight: normal;
+    color: #666;
+}
+
+.ui.search.segment:hover {
+    -webkit-transform: translateY(5px);
+    transform: translateY(5px);
+    box-shadow: 0 5px 35px 0px rgba(0,0,0,.1);
+}

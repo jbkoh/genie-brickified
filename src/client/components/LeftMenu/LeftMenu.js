@@ -51,7 +51,7 @@ class LeftMenu extends Component {
 
     return (
       <div>
-        <Header menu={this.state.activeMenu} home={"Genie"} />
+        <Header />
         <div className="left-menus">
           {menus.map(item => {
             if (item.submenus) {

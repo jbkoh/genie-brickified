@@ -1,19 +1,3 @@
-.ui.gradient1.card {
-    margin-bottom: 24px;
-    background-color: #623fb8;
-    background-image: -webkit-gradient(linear,left top,right top,from(#623fb8),to(#1a8ed1));
-    background-image: -webkit-linear-gradient(left,#623fb8,#1a8ed1);
-    height: 204px;
-}
-
-.ui.gradient2.card {
-    margin-bottom: 24px;
-    background-color: #46b05b;
-    background-image: -webkit-gradient(linear,left top,right top,from(#46b05b),to(#0abac1));
-    background-image: -webkit-linear-gradient(left,#46b05b,#0abac1);
-    height: 204px;
-}
-
 .ui.location.card {
     position: relative;
     top: 0;
@@ -36,26 +20,7 @@
     font-size: 3em;
 }
 
-.ui.dashboard.header {
-    font-size: 16px !important;
-    font-family: Poppins,sans-serif;
-    font-weight: normal;
-    color: #666;
-}
-
 .ui.location.card:hover {
-    -webkit-transform: translateY(5px);
-    transform: translateY(5px);
-    box-shadow: 0 5px 35px 0px rgba(0,0,0,.1);
-}
-
-.ui.gradient1.card:hover {
-    -webkit-transform: translateY(5px);
-    transform: translateY(5px);
-    box-shadow: 0 5px 35px 0px rgba(0,0,0,.1);
-}
-
-.ui.gradient2.card:hover {
     -webkit-transform: translateY(5px);
     transform: translateY(5px);
     box-shadow: 0 5px 35px 0px rgba(0,0,0,.1);

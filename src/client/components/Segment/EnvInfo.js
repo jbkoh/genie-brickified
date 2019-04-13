@@ -4,7 +4,7 @@ import './Segment.css';
 import Bar from 'react-meter-bar';
 
 const SegmentObject = ({icon, color, title, value, label, labels, progress}) => (
-    <Segment className={"pulse"} raised style={{height: "204px"}} >
+    <Segment className={"glowfloat"} raised style={{height: "204px"}} >
         <Grid>
             <Grid.Row>
                 <Grid.Column width={6} style={{
@@ -60,11 +60,13 @@ class SegmentComponent extends Component {
     return (
         <Grid>
             <Grid.Row>
-                <Divider horizontal style={{ marginLeft: "15px", marginRight: "15px" }} >
-                    <Header as='h3' className="segtitle">
-                        {this.props.title}
-                    </Header>
-                </Divider>
+                <Grid.Column>
+                    <Divider horizontal style={{ marginLeft: "15px", marginRight: "15px" }} >
+                        <Header as='h3' className="segtitle">
+                            {this.props.title}
+                        </Header>
+                    </Divider>
+                </Grid.Column>
             </Grid.Row>
             <Grid.Row>
                 <Grid.Column width={8} >

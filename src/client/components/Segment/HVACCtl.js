@@ -130,11 +130,13 @@ class SegmentComponent extends Component {
     return (
         <Grid>
             <Grid.Row>
-                <Divider horizontal style={{ marginLeft: "15px", marginRight: "15px" }} >
-                    <Header className="segtitle" as='h3'>
-                        {this.props.title}
-                    </Header>
-                </Divider>
+                <Grid.Column>
+                    <Divider horizontal style={{ marginLeft: "15px", marginRight: "15px" }} >
+                        <Header as='h3' className="segtitle" >
+                            {this.props.title}
+                        </Header>
+                    </Divider>
+                </Grid.Column>
             </Grid.Row>
             <Grid.Row>
                 <Grid.Column width={8} >

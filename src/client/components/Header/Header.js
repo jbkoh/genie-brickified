@@ -11,9 +11,7 @@ class Header extends Component {
         <h2 className="top-header">{menu}</h2>
         <div className="sub-header">
           <h5>
-            <Icon name="home" />
-            {home} &emsp; / &emsp;
-            <Icon name="calendar outline" />
+            {home}
             {menu}
           </h5>
         </div>

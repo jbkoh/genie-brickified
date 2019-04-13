@@ -29,16 +29,7 @@ class TopMenu extends Component {
             <Link to="dashboard">Genie</Link>
           </Menu.Item>
         </Menu.Menu>
-        <Menu.Menu className="center menu">
-          <Menu.Item
-            name="home"
-            active={activeItem === 'home'}
-            onClick={this.handleItemClick}
-          >
-            <Icon name="home" size="large" style={iconStyle} />
-            <span>Home</span>
-          </Menu.Item>
-
+        <Menu.Menu className="right menu">
           <Menu.Item name="setting" onClick={this.handleItemClick}>
             <MyMenu trigger={trigger} />
           </Menu.Item>
