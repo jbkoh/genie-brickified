@@ -25,12 +25,12 @@ class TopMenu extends Component {
     return (
       <Menu pointing secondary className="top-menu">
         <Menu.Menu postion="left" className="menu-logo">
-          <Menu.Item>
+          <Menu.Item position="left">
             <Link to="dashboard">Genie</Link>
           </Menu.Item>
         </Menu.Menu>
         <Menu.Menu className="right menu">
-          <Menu.Item name="setting" onClick={this.handleItemClick}>
+          <Menu.Item name="setting" onClick={this.handleItemClick} active={activeItem === "setting"}>
             <MyMenu trigger={trigger} />
           </Menu.Item>
         </Menu.Menu>

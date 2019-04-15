@@ -12,12 +12,12 @@ class DateWeather extends Component {
                         {"Data & Time, and Weather"}
                     </Header>
                 </Divider>
-                <Card color='red' className={"gradient"} >
+                <Card fluid color='red' className={"gradient"} >
                     <Grid>
                         <Grid.Row style={{
                             paddingTop: 40,
                             paddingBottom: 0,
-                            height: 101
+                            minHeight: 101
                         }}>
                             <Grid.Column width={6} style={{
                                 textAlign: "center",
@@ -69,7 +69,7 @@ class DateWeather extends Component {
                         <Grid.Row style={{
                             paddingTop: 40,
                             paddingBottom: 0,
-                            height: 101
+                            minHeight: 101
                         }}>
                             <Grid.Column width={6} style={{
                                 textAlign: "center",
@@ -89,14 +89,14 @@ class DateWeather extends Component {
                                 <Grid.Row style={{
                                 }} >
                                     <Header className={"dashboard"}>
-                                        {"Weather: " + "clear"}
+                                        {"clear"}
                                     </Header>
                                 </Grid.Row>
                                 <Grid.Row style={{
                                     paddingTop: 10
                                 }} >
                                     <Header className={"dashboard"}>
-                                        {"Temperature: " + "63.8" + "°F"}
+                                        {"63.8" + "°F"}
                                     </Header>
                                 </Grid.Row>
                             </Grid.Column>

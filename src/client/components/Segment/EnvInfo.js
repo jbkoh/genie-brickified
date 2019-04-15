@@ -3,8 +3,8 @@ import { Grid, Icon, Header, Segment, Divider, Statistic } from 'semantic-ui-rea
 import './Segment.css';
 import Bar from 'react-meter-bar';
 
-const SegmentObject = ({icon, color, title, value, label, labels, progress}) => (
-    <Segment className={"glowfloat"} raised style={{height: "204px"}} >
+const SegmentObject = ({icon, color, title, value, label, labels, progress, mobile}) => (
+    <Segment className={"glowfloat"} raised style={{minHeight: "204px"}} color="red">
         <Grid>
             <Grid.Row>
                 <Grid.Column width={6} style={{
@@ -14,7 +14,7 @@ const SegmentObject = ({icon, color, title, value, label, labels, progress}) => 
                     <Grid.Row style={{
                         marginTop: 40,
                     }} >
-                        <Icon name={icon} size='massive' style={{
+                        <Icon name={icon} size={mobile ? 'huge' : 'huge'} style={{
                             color: color
                         }} />
                     </Grid.Row>
@@ -57,8 +57,9 @@ class SegmentComponent extends Component {
     const energy_value = 1.5, temperature_value = 75.7;
     const energy_progress = energy_value / 3.0 * 100.0;
     const temperature_progress = (temperature_value - 60.0) / 20.0 * 100.0;
+    const mobile_labels = (this.props.mobile) ? [60,65,70,75,80] : [60,64,68,72,76,80];
     return (
-        <Grid>
+        <Grid container={this.props.mobile} stackable={this.props.mobile}>
             <Grid.Row>
                 <Grid.Column>
                     <Divider horizontal style={{ marginLeft: "15px", marginRight: "15px" }} >
@@ -72,12 +73,14 @@ class SegmentComponent extends Component {
                 <Grid.Column width={8} >
                     <SegmentObject icon={"tachometer alternate"} color={"rgb(216, 151, 235)"} 
                         title={"Energy Usage"} value={energy_value} label={"kW"} 
-                        labels={[0,0.5,1,1.5,2,2.5,3]} progress={energy_progress} />
+                        labels={[0,0.5,1,1.5,2,2.5,3]} progress={energy_progress} 
+                        mobile={this.props.mobile} />
                 </Grid.Column>
                 <Grid.Column width={8} >
                     <SegmentObject icon={"thermometer"} color={"rgb(100, 234, 145)"} 
                         title={"Room Temperature"} value={temperature_value} label={"°F"} 
-                        labels={[60,64,68,72,76,80]} progress={temperature_progress} />
+                        labels={mobile_labels} progress={temperature_progress}
+                        mobile={this.props.mobile} />
                 </Grid.Column>
             </Grid.Row>
         </Grid>

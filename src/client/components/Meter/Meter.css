@@ -1,0 +1,5 @@
+.ui.bigglow:hover {
+    -webkit-transform: translateY(10px);
+    transform: translateY(10px);
+    box-shadow: 0 5px 35px 0px rgba(0,0,0,.1);
+}

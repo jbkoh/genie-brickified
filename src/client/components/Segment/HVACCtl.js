@@ -3,8 +3,8 @@ import { Grid, Icon, Header, Segment, Divider, Statistic, Button } from 'semanti
 import './Segment.css';
 import Slider from 'react-input-slider';
 
-const SegmentObject = ({icon, color, title, value, label, handleChangeTemp}) => (
-    <Segment className={"glowfloat"} raised style={{height: "204px"}} >
+const SegmentObject = ({icon, color, title, value, label, handleChangeTemp, mobile}) => (
+    <Segment className={"glowfloat"} raised style={{minHeight: "204px"}} color="violet">
         <Grid>
             <Grid.Row>
                 <Grid.Column width={6} style={{
@@ -14,8 +14,9 @@ const SegmentObject = ({icon, color, title, value, label, handleChangeTemp}) => 
                     <Grid.Row style={{
                         marginTop: 40,
                     }} >
-                        <Icon name={icon} size='massive' style={{
-                            color: color
+                        <Icon name={icon} size={mobile ? 'huge' : 'huge'} style={{
+                            color: color,
+                            marginTop: "50% !important",
                         }} />
                     </Grid.Row>
                 </Grid.Column>
@@ -33,8 +34,11 @@ const SegmentObject = ({icon, color, title, value, label, handleChangeTemp}) => 
                     }} >
                         <Slider
                             styles={{
+                                track: {
+                                    width: '100% !important',
+                                },
                                 active: {
-                                backgroundColor: 'rgb(248, 200, 46)'
+                                    backgroundColor: 'rgb(248, 200, 46)'
                                 }
                             }}
                             axis="x"
@@ -58,8 +62,8 @@ const SegmentObject = ({icon, color, title, value, label, handleChangeTemp}) => 
     </Segment>
 );
 
-const SwitchObject = ({icon, color, title, value, toggleStatus}) => (
-    <Segment className={"glowfloat"} raised style={{height: "204px"}}>
+const SwitchObject = ({icon, color, title, value, toggleStatus, mobile}) => (
+    <Segment className={"glowfloat"} raised style={{minHeight: "204px"}} color="teal">
         <Grid>
             <Grid.Row>
                 <Grid.Column width={6} style={{
@@ -69,8 +73,9 @@ const SwitchObject = ({icon, color, title, value, toggleStatus}) => (
                     <Grid.Row style={{
                         marginTop: 40,
                     }} >
-                        <Icon disabled={value === "OFF"} name={icon} size='massive' style={{
-                            color: (value === "OFF") ? "#666" : color
+                        <Icon disabled={value === "OFF"} name={icon} size={mobile ? 'huge' : 'huge'} style={{
+                            color: (value === "OFF") ? "#666" : color,
+                            marginTop: "50% !important",
                         }} />
                     </Grid.Row>
                 </Grid.Column>
@@ -86,7 +91,8 @@ const SwitchObject = ({icon, color, title, value, toggleStatus}) => (
                         marginTop: 15,
                     }} >
                         <Button icon labelPosition='right' 
-                            color={value === "OFF" ? 'blue' : 'red'} onClick={toggleStatus} >
+                            color={value === "OFF" ? 'blue' : 'red'} onClick={toggleStatus} 
+                            style={{width: '100% !important'}}>
                             {value === "OFF" ? "Turn On" : "Turn Off"}
                             <Icon name={value === "OFF" ? "toggle on" : "toggle off"} />
                         </Button>
@@ -95,7 +101,7 @@ const SwitchObject = ({icon, color, title, value, toggleStatus}) => (
                         marginTop: 20,
                     }} >
                       <Statistic size="small" horizontal floated={"left"}>  
-                        <Header className="segtitle" style={{marginRight: 20}}>Current<span><br /></span>Status:</Header><Statistic.Value>{value}</Statistic.Value>
+                        <Statistic.Value>{value}</Statistic.Value>
                       </Statistic>
                     </Grid.Row>
                 </Grid.Column>
@@ -128,7 +134,7 @@ class SegmentComponent extends Component {
   render() {
     const { status, temperature } = this.state;
     return (
-        <Grid>
+        <Grid container={this.props.mobile} stackable={this.props.mobile}>
             <Grid.Row>
                 <Grid.Column>
                     <Divider horizontal style={{ marginLeft: "15px", marginRight: "15px" }} >
@@ -142,12 +148,12 @@ class SegmentComponent extends Component {
                 <Grid.Column width={8} >
                     <SwitchObject icon={"power off"} color={"rgb(143, 201, 251)"} 
                         title={"Status"} value={(status === 3) ? "ON" : "OFF"}
-                        toggleStatus={this.toggleStatus} />
+                        toggleStatus={this.toggleStatus} mobile={this.props.mobile} />
                 </Grid.Column>
                 <Grid.Column width={8} >
                     <SegmentObject icon={"thermometer quarter"} color={"rgb(248, 200, 46)"} 
                         title={"Temperature"} value={temperature} label={"°F"}
-                        handleChangeTemp={this.handleChangeTemp} />
+                        handleChangeTemp={this.handleChangeTemp} mobile={this.props.mobile} />
                 </Grid.Column>
             </Grid.Row>
         </Grid>

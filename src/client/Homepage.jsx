@@ -141,8 +141,6 @@ class DesktopContainer extends Component {
   hideFixedMenu = () => this.setState({ fixed: false });
   showFixedMenu = () => this.setState({ fixed: true });
 
-  showContactPage = () => this.setState({ contact: true });
-
   render() {
     const { children } = this.props;
     const { fixed, contact, about, activeItem } = this.state;
@@ -213,7 +211,7 @@ DesktopContainer.propTypes = {
 };
 
 class MobileContainer extends Component {
-  state = {};
+  state = {activeItem: "home"};
 
   handlePusherClick = () => {
     const { sidebarOpened } = this.state;
@@ -227,6 +225,8 @@ class MobileContainer extends Component {
   render() {
     const { children } = this.props;
     const { sidebarOpened } = this.state;
+    const { contact, about, activeItem } = this.state;
+    const heading = (about) ? <AboutpageHeading mobile /> : <HomepageHeading mobile />;
 
     return (
       <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
@@ -234,15 +234,24 @@ class MobileContainer extends Component {
           <Sidebar
             as={Menu}
             animation="uncover"
-            inverted
             vertical
             visible={sidebarOpened}
           >
-            <Menu.Item as="a" active>Home</Menu.Item>
-            <Menu.Item as="a">Contact</Menu.Item>
-            <Menu.Item as="a">About</Menu.Item>
-            <Menu.Item as="a">Log in</Menu.Item>
-            <Menu.Item as="a">Sign Up</Menu.Item>
+            <Menu.Item name="home" as="a" 
+              onClick={() => this.setState({about: false, activeItem: "home", 
+              sidebarOpened: !this.state.sidebarOpened})} active={activeItem === "home"}>
+              Home
+            </Menu.Item>
+            <Menu.Item name="contact" as="a" 
+              onClick={() => this.setState({contact: true, about: false, activeItem: "contact", 
+              sidebarOpened: !this.state.sidebarOpened})} active={activeItem === "contact"}>
+              Contact
+            </Menu.Item>
+            <Menu.Item name="about" as="a" 
+              onClick={() => this.setState({about: true, activeItem: "about", 
+              sidebarOpened: !this.state.sidebarOpened})} active={activeItem === "about"}>
+              About
+            </Menu.Item>
           </Sidebar>
 
           <Sidebar.Pusher
@@ -251,13 +260,16 @@ class MobileContainer extends Component {
             style={{ minHeight: "100vh" }}
           >
             <Segment
+              className="masthead bg14"
               inverted
               textAlign="center"
               style={{ minHeight: 350, padding: "1em 0em" }}
               vertical
             >
               <Container>
-                <Menu inverted pointing secondary size="large">
+                <Menu inverted pointing secondary size="large" style={{
+                  borderWidth: 0
+                }}>
                   <Menu.Item onClick={this.handleToggle}>
                     <Icon name="sidebar" />
                   </Menu.Item>
@@ -271,10 +283,11 @@ class MobileContainer extends Component {
                   </Menu.Item>
                 </Menu>
               </Container>
-              <HomepageHeading mobile />
+              {heading}
             </Segment>
 
             {children}
+            <Contact open={contact} onClose={() => this.setState({contact: false, about: false})} />
           </Sidebar.Pusher>
         </Sidebar.Pushable>
       </Responsive>
@@ -312,14 +325,13 @@ class HomepageLayout extends Component {
                 paddingBottom: "16px"}}>
                   Related Organizations
                 </header>
-                <Grid>
+                <Grid container>
                   <Grid.Row>
                     <Grid.Column width={4}>
                       <a href="http://synergy.ucsd.edu/">
                         <Card
                           className={"hover"}
                           image={synergy_logo}
-                          meta='SYNERGY'
                           style={{textAlign: "center"}}
                         />
                       </a>
@@ -329,7 +341,6 @@ class HomepageLayout extends Component {
                         <Card
                           className={"hover"}
                           image={mesl_logo}
-                          meta='MESL'
                           style={{textAlign: "center"}}
                         />
                       </a>
@@ -339,7 +350,6 @@ class HomepageLayout extends Component {
                         <Card
                           className={"hover"}
                           image={cse_logo}
-                          meta='UCSD CSE'
                           style={{textAlign: "center"}}
                         />
                       </a>
@@ -349,7 +359,6 @@ class HomepageLayout extends Component {
                         <Card
                           className={"hover"}
                           image={ucsd_logo}
-                          meta='UC San Diego'
                           style={{textAlign: "center", backgroundColor: "white"}}
                         />
                       </a>
@@ -398,16 +407,16 @@ class HomepageLayout extends Component {
             </Grid.Row>
           </Grid>
         </Segment>
-        <Segment inverted vertical textAlign="center" style={{ padding: "5em 0em" }} className="masthead bg14">
+        <Segment inverted vertical textAlign="center" style={{ padding: "2em 0em" }} className="masthead bg14">
           <Container>
-            <Header as="h4" inverted
+            <Header as="h5" inverted
             style={{
               fontFamily: "Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",
               fontWeight: "normal",
             }}>
               UC San Diego 9500 Gilman Dr. La Jolla, CA 92093 ©2013 Regents of the University of California. All rights reserved.
             </Header>
-            <Header as="h4" inverted
+            <Header as="h5" inverted
             style={{
               fontFamily: "Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",
               fontWeight: "normal",

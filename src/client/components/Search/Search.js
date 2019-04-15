@@ -1,75 +1,17 @@
 import React, { Component } from 'react';
-import { Grid, Dropdown, Segment, Divider, Header, Icon, Table, Button } from 'semantic-ui-react';
+import { Grid, Dropdown, Segment, Divider, Header, Icon, Button, Breadcrumb, List } from 'semantic-ui-react';
 import './Search.css';
 
 class Dashboard extends Component {
     state = {
-        options: [],
-        temp: {}
-    }
-
-    changeRoom = (e, {value}) => {
-        this.setState(prevState => ({
-            temp: {
-                ...prevState.temp,
-                room: {value}
-            }
-        }))
-    }
-
-    changeCampus = (e, {value}) => {
-        this.setState(prevState => ({
-            temp: {
-                ...prevState.temp,
-                campus: {value}
-            }
-        }))
-    }
-
-    changeBuilding = (e, {value}) => {
-        this.setState(prevState => ({
-            temp: {
-                ...prevState.temp,
-                building: {value}
-            }
-        }))
-    }
-
-    changeCollege = (e, {value}) => {
-        this.setState(prevState => ({
-            temp: {
-                ...prevState.temp,
-                college: {value}
-            }
-        }))
-    }
-
-    onAddItem = () => {
-        this.setState(
-            state => {
-                if(!state.options.includes(state.temp))
-                    state.options.push(state.temp)
-                const options = state.options
-                return {
-                    options,
-                    temp: state.temp
-                }
-            }
-        )
-    }
-
-    onRemoveItem = i => {
-        this.setState(state => {
-            const options = state.options.filter((item, j) => i !== j)
-
-            return {
-                options,
-            }
-        })
+        open: true
     }
 
     render() {
-        const {options} = this.state
+        const {open} = this.state
+        const {onAddItem, onRemoveItem, changeBuilding, changeCampus, changeCollege,
+          changeRoom, options} = this.props
+        const message = open ? 'Hide Room List' : 'Show Room List'
         const collegeOptions = [
             {key: 'UCSD', value: 'UCSD', text: 'UCSD'},
         ]
@@ -84,6 +26,26 @@ class Dashboard extends Component {
             {key: '2150', value: '2150', text: '2150'},
             {key: '2160', value: '2160', text: '2160'},
         ]
+        const table = (open) ? (
+            options.map((option, index) => (
+                <List.Item floated="left">
+                    <List.Content>
+                        <List.Header>
+                            <Icon name="building" />
+                            <Breadcrumb icon='right angle' sections={[
+                                { key: option.college.value, content: option.college.value, link: false },
+                                { key: option.campus.value, content: option.campus.value, link: false },
+                                { key: option.building.value, content: option.building.value, link: false },
+                                { key: option.room.value, content: option.room.value, link: false },
+                            ]} style={{marginLeft: 10}}/>
+                            <Button compact color="red" size="mini" 
+                                    onClick={() => onRemoveItem(index)}
+                                    basic style={{marginLeft: 10}}>Delete</Button>
+                        </List.Header>
+                    </List.Content>
+                </List.Item>
+            ))
+        ) : (<div></div>)
         return (      
             <Grid>
                 <Grid.Row>
@@ -93,53 +55,36 @@ class Dashboard extends Component {
                                 {"Room Selection"}
                             </Header>
                         </Divider>
-                        <Segment className={"search"}>
+                        <Segment className={"search"} color="teal">
                             <Grid>
                                 <Grid.Row textAlign="center">
                                     <Grid.Column>
-                                        <Dropdown placeholder='College' search selection options={collegeOptions} 
-                                        onChange={this.changeCollege} compact />
+                                        <Button icon="search" basic style={{marginRight: 3}} />
+                                        <Dropdown placeholder='College' clearable search selection options={collegeOptions} 
+                                        onChange={changeCollege} compact />
                                         <Icon name='right angle' />
-                                        <Dropdown placeholder='Campus' search selection options={campusOptions} 
-                                        onChange={this.changeCampus} compact />
+                                        <Dropdown placeholder='Campus' clearable search selection options={campusOptions} 
+                                        onChange={changeCampus} compact />
                                         <Icon name='right angle' />
-                                        <Dropdown placeholder='Building' search selection options={buildingOptions} 
-                                        onChange={this.changeBuilding} compact />
+                                        <Dropdown placeholder='Building' clearable search selection options={buildingOptions} 
+                                        onChange={changeBuilding} compact />
                                         <Icon name='right angle' />
-                                        <Dropdown placeholder='Room' search selection options={roomOptions} 
-                                        onChange={this.changeRoom} compact />
-                                        <Button size="small" color="green" style={{
+                                        <Dropdown placeholder='Room' clearable search selection options={roomOptions} 
+                                        onChange={changeRoom} compact />
+                                        <Button size="small" color="green" compact style={{
                                             marginLeft: 15
-                                        }} onClick={this.onAddItem}>Add</Button>
+                                        }} onClick={onAddItem} basic>Add</Button>
                                     </Grid.Column>
                                 </Grid.Row>
+                                <Divider style={{marginTop: 0, marginBottom: 0, paddingBottom: 0, paddingTop: 0}}/>
                                 <Grid.Row textAlign="center">
                                     <Grid.Column>
-                                        <Table compact celled fixed >
-                                            <Table.Header>
-                                                <Table.Row>
-                                                    <Table.HeaderCell>Action</Table.HeaderCell>
-                                                    <Table.HeaderCell>College</Table.HeaderCell>
-                                                    <Table.HeaderCell>Campus</Table.HeaderCell>
-                                                    <Table.HeaderCell>Building</Table.HeaderCell>
-                                                    <Table.HeaderCell>Room</Table.HeaderCell>
-                                                </Table.Row>
-                                            </Table.Header>
-
-                                            <Table.Body>
-                                                {options.map((option, index) => (
-                                                    <Table.Row>
-                                                        <Table.Cell>
-                                                            <Button color="red" size="mini" onClick={() => this.onRemoveItem(index)}>Delete</Button>
-                                                        </Table.Cell>
-                                                        <Table.Cell>{option.college.value}</Table.Cell>
-                                                        <Table.Cell>{option.campus.value}</Table.Cell>
-                                                        <Table.Cell>{option.building.value}</Table.Cell>
-                                                        <Table.Cell>{option.room.value}</Table.Cell>
-                                                    </Table.Row>
-                                                ))}
-                                            </Table.Body>
-                                        </Table>
+                                        <List animated selection divided verticalAlign='middle' style={{marginTop:0, paddingTop: 0}}>
+                                            {table}
+                                        </List>
+                                        <Button basic compact size="mini" floated="right" onClick={() => {
+                                            this.setState({open: !open})
+                                        }} color={(open) ? 'red' : 'green'}>{message}</Button>
                                     </Grid.Column>
                                 </Grid.Row>
                             </Grid>
