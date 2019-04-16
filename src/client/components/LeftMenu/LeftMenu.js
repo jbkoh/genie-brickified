@@ -58,7 +58,11 @@ class LeftMenu extends Component {
               return (
                 <div key={item.name}
                   className={this.state.activeMenu === item.name ? 'menu active' : 'menu' }
-                  onClick={() => this.setState({ activeMenu: item.name })}>
+                  onClick={() => {
+                    this.setState({ activeMenu: item.name })
+                    this.props.switchAccount(item.name === 'Account')
+                  }}
+                >
                     <Icon name={item.icon} size="large"/>
                     <span>{item.name}</span>
                     <Icon name={this.state.activeMenu === item.name ? "angle up" : "angle down" }/>
@@ -72,14 +76,16 @@ class LeftMenu extends Component {
               )
             } else {
               return (
-                <Link to={item.name} name={item.name} key={item.name}
+                <div name={item.name} key={item.name}
                   className={this.state.activeMenu === item.name ? 'menu active' : 'menu' }
-                  onClick={() => this.setState({ activeMenu: item.name })}
-                  >
+                  onClick={() => {
+                    this.setState({ activeMenu: item.name })
+                    this.props.switchAccount(item.name === 'Account')
+                  }}
+                >
                   <Icon name={item.icon} size="large"/>
                   <span>{item.name}</span>
-                </Link>
-              )
+                </div>)
             }
           })}
         </div>

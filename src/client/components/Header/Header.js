@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Icon } from 'semantic-ui-react';
 import './Header.css';
 
 class Header extends Component {

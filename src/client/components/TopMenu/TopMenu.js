@@ -5,7 +5,7 @@ import MyMenu from './MyMenu';
 import './TopMenu.css';
 
 class TopMenu extends Component {
-  state = { activeItem: 'inbox' };
+  state = { activeItem: 'home' };
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name });
 
@@ -29,9 +29,28 @@ class TopMenu extends Component {
             <Link to="dashboard">Genie</Link>
           </Menu.Item>
         </Menu.Menu>
+
+        <Menu.Menu className="center menu">
+          <Menu.Item
+            name="home"
+            onClick={() => {
+              this.setState({ activeItem: 'home' })
+              this.props.switchAccount(false)
+            }}
+            active={activeItem === 'home'}
+          >
+            <Icon name="inbox" size="large" style={iconStyle} />
+            <span>Dashboard</span>
+          </Menu.Item>
+        </Menu.Menu>
+
         <Menu.Menu className="right menu">
-          <Menu.Item name="setting" onClick={this.handleItemClick} active={activeItem === "setting"}>
-            <MyMenu trigger={trigger} />
+          <Menu.Item 
+            name="setting" 
+            onClick={this.handleItemClick} 
+            active={activeItem === "setting"}
+          >
+            <MyMenu trigger={trigger} switchAccount={this.props.switchAccount} />
           </Menu.Item>
         </Menu.Menu>
       </Menu>

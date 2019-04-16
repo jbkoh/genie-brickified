@@ -5,21 +5,32 @@ import Dashboard from './Dashboard';
 import './css/Mainpage.css';
 import {Responsive} from 'semantic-ui-react';
 import PropTypes from "prop-types";
+import Account from './components/Account/Account'
 
 class DesktopContainer extends Component {
   render() {
     const {onAddItem, onRemoveItem, changeBuilding, changeCampus, changeCollege,
-      changeRoom} = this.props
+      changeRoom, account, switchAccount} = this.props
+    const main = account ? (
+      <div className="main-container">
+        <Account mobile={false} options={this.props.options} updateOptions={this.props.updateOptions} 
+      onAddItem={onAddItem} onRemoveItem={onRemoveItem} 
+      changeBuilding={changeBuilding} changeCampus={changeCampus}
+      changeCollege={changeCollege} changeRoom={changeRoom} />
+      </div>
+    ) : (
+      <div className="main-container">
+        <Dashboard mobile={false} options={this.props.options} updateOptions={this.props.updateOptions} 
+      onAddItem={onAddItem} onRemoveItem={onRemoveItem} 
+      changeBuilding={changeBuilding} changeCampus={changeCampus}
+      changeCollege={changeCollege} changeRoom={changeRoom} />
+      </div>
+    );
     return (
       <Responsive minWidth={1136} >
-        <TopMenu />
-        <LeftMenu />
-        <div className="main-container">
-          <Dashboard mobile={false} options={this.props.options} updateOptions={this.props.updateOptions} 
-        onAddItem={onAddItem} onRemoveItem={onRemoveItem} 
-        changeBuilding={changeBuilding} changeCampus={changeCampus}
-        changeCollege={changeCollege} changeRoom={changeRoom} />
-        </div>
+        <TopMenu switchAccount={switchAccount} />
+        <LeftMenu switchAccount={switchAccount} />
+        {main}
       </Responsive>
     );
   }
@@ -32,16 +43,26 @@ DesktopContainer.propTypes = {
 class MobileContainer extends Component {
   render() {
     const {onAddItem, onRemoveItem, changeBuilding, changeCampus, changeCollege,
-      changeRoom} = this.props
-    return (
-      <Responsive maxWidth={1135}>
-        <TopMenu />
+      changeRoom, account, switchAccount} = this.props
+      const main = account ? (
+        <div className="mobile-container">
+          <Account mobile={true} options={this.props.options} updateOptions={this.props.updateOptions} 
+        onAddItem={onAddItem} onRemoveItem={onRemoveItem} 
+        changeBuilding={changeBuilding} changeCampus={changeCampus}
+        changeCollege={changeCollege} changeRoom={changeRoom} />
+        </div>
+      ) : (
         <div className="mobile-container">
           <Dashboard mobile={true} options={this.props.options} updateOptions={this.props.updateOptions} 
         onAddItem={onAddItem} onRemoveItem={onRemoveItem} 
         changeBuilding={changeBuilding} changeCampus={changeCampus}
         changeCollege={changeCollege} changeRoom={changeRoom} />
         </div>
+      );
+    return (
+      <Responsive maxWidth={1135}>
+        <TopMenu switchAccount={switchAccount} />
+        {main}
       </Responsive>
     );
   }
@@ -52,16 +73,18 @@ MobileContainer.propTypes = {
 };
 
 const ResponsiveContainer = ({ children, options, updateOptions, onAddItem, onRemoveItem, changeBuilding,
-changeCampus, changeCollege, changeRoom }) => (
+changeCampus, changeCollege, changeRoom, account, switchAccount }) => (
   <div>
     <DesktopContainer options={options} updateOptions={updateOptions} 
         onAddItem={onAddItem} onRemoveItem={onRemoveItem} 
         changeBuilding={changeBuilding} changeCampus={changeCampus}
-        changeCollege={changeCollege} changeRoom={changeRoom} >{children}</DesktopContainer>
+        changeCollege={changeCollege} changeRoom={changeRoom}
+        account={account} switchAccount={switchAccount} >{children}</DesktopContainer>
     <MobileContainer options={options} updateOptions={updateOptions} 
         onAddItem={onAddItem} onRemoveItem={onRemoveItem} 
         changeBuilding={changeBuilding} changeCampus={changeCampus}
-        changeCollege={changeCollege} changeRoom={changeRoom} >{children}</MobileContainer>
+        changeCollege={changeCollege} changeRoom={changeRoom}
+        account={account} switchAccount={switchAccount} >{children}</MobileContainer>
   </div>
 );
 
@@ -73,6 +96,11 @@ class Main extends Component {
   state = {
     options: [],
     temp: {},
+    account: false
+  }
+
+  switchAccount = (option) => {
+    this.setState({account: option})
   }
 
   updateOptions = (options) => {
@@ -142,12 +170,13 @@ class Main extends Component {
   }
 
   render() {
-    const {options} = this.state;
+    const {options, account} = this.state;
     return (
       <ResponsiveContainer options={options} updateOptions={this.updateOptions} 
         onAddItem={this.onAddItem} onRemoveItem={this.onRemoveItem} 
         changeBuilding={this.changeBuilding} changeCampus={this.changeCampus}
-        changeCollege={this.changeCollege} changeRoom={this.changeRoom} />
+        changeCollege={this.changeCollege} changeRoom={this.changeRoom}
+        account={account} switchAccount={this.switchAccount} />
     );
   }
 }
