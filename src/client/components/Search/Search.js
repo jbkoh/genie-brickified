@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Dropdown, Segment, Divider, Header, Icon, Button, Breadcrumb, List } from 'semantic-ui-react';
+import { Grid, Dropdown, Segment, Divider, Icon, Button, Breadcrumb, List } from 'semantic-ui-react';
 import './Search.css';
 
 class Dashboard extends Component {
