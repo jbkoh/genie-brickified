@@ -4,7 +4,7 @@ import './Segment.css';
 import Bar from 'react-meter-bar';
 
 const SegmentObject = ({icon, color, title, value, label, labels, progress, mobile}) => (
-    <Segment className={"glowfloat"} raised style={{minHeight: "204px"}} color="red">
+    <Segment  raised style={{minHeight: "204px"}} color="red">
         <Grid>
             <Grid.Row>
                 <Grid.Column width={6} style={{

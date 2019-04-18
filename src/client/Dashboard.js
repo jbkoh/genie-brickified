@@ -10,7 +10,7 @@ class Dashboard extends Component {
     const {onAddItem, onRemoveItem, changeBuilding, changeCampus, changeCollege,
       changeRoom, options, updateOptions} = this.props
     const message = (options.length === 0) ? (
-      <Message attached='bottom' warning className="bigglow">
+      <Message attached='bottom' warning>
         <Icon name='warning' />
         Please Add Room
       </Message>

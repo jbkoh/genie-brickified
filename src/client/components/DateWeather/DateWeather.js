@@ -7,11 +7,6 @@ class DateWeather extends Component {
     render() {
         return(
             <div>
-                <Divider horizontal style={{ paddingBottom: "28px" }} >
-                    <Header as='h3' className="dashboard">
-                        {"Data & Time, and Weather"}
-                    </Header>
-                </Divider>
                 <Card fluid color='red' className={"gradient"} >
                     <Grid>
                         <Grid.Row style={{

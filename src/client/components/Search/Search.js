@@ -50,11 +50,6 @@ class Dashboard extends Component {
             <Grid>
                 <Grid.Row>
                     <Grid.Column textAlign="center">
-                        <Divider horizontal style={{ paddingBottom: "28px" }} >
-                            <Header as='h3' className="searchdashboard">
-                                {"Room Selection"}
-                            </Header>
-                        </Divider>
                         <Segment className={"search"} color="teal">
                             <Grid>
                                 <Grid.Row textAlign="center">

@@ -35,7 +35,7 @@ class Meter extends Component {
         ) : (<div></div>)
 
         return(
-            <Segment.Group className={"bigglow"}>
+            <Segment.Group>
                 <Segment>
                     <Breadcrumb icon='right angle' sections={sections} />
                     <Button icon={icon} basic size="mini" floated="right" onClick={() => {
