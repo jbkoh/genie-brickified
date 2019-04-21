@@ -169,6 +169,29 @@ class Main extends Component {
       })
   }
 
+  componentWillMount() {
+      localStorage.getItem('options') && this.setState({
+        options: JSON.parse(localStorage.getItem('options'))
+      })
+      localStorage.getItem('temp') && this.setState({
+        temp: JSON.parse(localStorage.getItem('temp'))
+      })
+  }
+
+  componentDidMount() {
+    if(!localStorage.getItem('options')) {
+      //todo: fetch data
+    }
+    if(!localStorage.getItem('temp')) {
+      //todo: fetch data
+    }
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+      localStorage.setItem('options', JSON.stringify(nextState.options))
+      localStorage.setItem('temp', JSON.stringify(nextState.temp))
+  }
+
   render() {
     const {options, account} = this.state;
     return (

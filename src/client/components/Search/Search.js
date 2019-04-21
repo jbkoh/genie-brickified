@@ -4,14 +4,30 @@ import './Search.css';
 
 class Dashboard extends Component {
     state = {
-        open: true
+        openSearch: true
+    }
+
+    componentWillMount() {
+        localStorage.getItem('openSearch') && this.setState({
+            openSearch: JSON.parse(localStorage.getItem('openSearch'))
+        })
+    }
+  
+    componentDidMount() {
+      if(!localStorage.getItem('openSearch')) {
+        //todo: fetch data
+      }
+    }
+
+    componentWillUpdate(nextProps, nextState) {
+        localStorage.setItem('openSearch', JSON.stringify(nextState.openSearch))
     }
 
     render() {
-        const {open} = this.state
+        const {openSearch} = this.state
         const {onAddItem, onRemoveItem, changeBuilding, changeCampus, changeCollege,
           changeRoom, options} = this.props
-        const message = open ? 'Hide Room List' : 'Show Room List'
+        const message = openSearch ? 'Hide Room List' : 'Show Room List'
         const collegeOptions = [
             {key: 'UCSD', value: 'UCSD', text: 'UCSD'},
         ]
@@ -26,7 +42,7 @@ class Dashboard extends Component {
             {key: '2150', value: '2150', text: '2150'},
             {key: '2160', value: '2160', text: '2160'},
         ]
-        const table = (open) ? (
+        const table = (openSearch) ? (
             options.map((option, index) => (
                 <List.Item floated="left">
                     <List.Content>
@@ -78,8 +94,8 @@ class Dashboard extends Component {
                                             {table}
                                         </List>
                                         <Button basic compact size="mini" floated="right" onClick={() => {
-                                            this.setState({open: !open})
-                                        }} color={(open) ? 'red' : 'green'}>{message}</Button>
+                                            this.setState({openSearch: !openSearch})
+                                        }} color={(openSearch) ? 'red' : 'green'}>{message}</Button>
                                     </Grid.Column>
                                 </Grid.Row>
                             </Grid>

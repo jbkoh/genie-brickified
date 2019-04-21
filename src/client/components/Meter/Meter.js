@@ -6,7 +6,23 @@ import HVACCtl from '../Segment/HVACCtl'
 
 class Meter extends Component {
     state = {
-        open: true
+        openMeter: true
+    }
+
+    componentWillMount() {
+        localStorage.getItem('openMeter') && this.setState({
+            openMeter: JSON.parse(localStorage.getItem('openMeter'))
+        })
+    }
+  
+    componentDidMount() {
+      if(!localStorage.getItem('openMeter')) {
+        //todo: fetch data
+      }
+    }
+
+    componentWillUpdate(nextProps, nextState) {
+        localStorage.setItem('openMeter', JSON.stringify(nextState.openMeter))
     }
 
     render() {
@@ -17,9 +33,9 @@ class Meter extends Component {
             { key: option.building.value, content: option.building.value, link: false },
             { key: option.room.value, content: option.room.value, link: false },
         ]
-        const {open} = this.state;
-        const icon = open ? 'angle up' : 'angle down'
-        const control = open ? (
+        const {openMeter} = this.state;
+        const icon = openMeter ? 'angle up' : 'angle down'
+        const control = openMeter ? (
             <Responsive as={Segment}>
                 <Grid container={this.props.mobile} stackable={this.props.mobile}>
                     <Grid.Row columns={2}>
@@ -39,7 +55,7 @@ class Meter extends Component {
                 <Segment>
                     <Breadcrumb icon='right angle' sections={sections} />
                     <Button icon={icon} basic size="mini" floated="right" onClick={() => {
-                        this.setState({open: !open})
+                        this.setState({openMeter: !openMeter})
                     }} />
                 </Segment>
                 {control}
