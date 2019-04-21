@@ -11,7 +11,7 @@ class Account extends Component {
             <Grid container={this.props.mobile} stackable={this.props.mobile}>
                 <Grid.Row>
                     <Grid.Column>
-                        <Segment.Group className={"bigglow"}>
+                        <Segment.Group>
                             <Segment inverted style={{backgroundColor: '#cabadf'}}>
                                 <Header as='h3' style={{color: '#563d7c'}}>
                                     <Icon name='terminal' />
@@ -19,7 +19,7 @@ class Account extends Component {
                                 </Header>
                             </Segment>
 
-                            <Segment.Group style={{marginTop: 10}} className={"bigglow"}>
+                            <Segment.Group style={{marginTop: 10}}>
                                 <Responsive as={Segment} inverted style={{backgroundColor: '#cabadf'}}>
                                     <Breadcrumb sections={[
                                         { key: 'General Information', content: 'General Information', active: true },
@@ -43,7 +43,7 @@ class Account extends Component {
                                 </Responsive>
                             </Segment.Group>
 
-                            <Segment.Group className={"bigglow"}>
+                            <Segment.Group>
                                 <Responsive as={Segment} inverted style={{backgroundColor: '#cabadf'}}>
                                     <Breadcrumb sections={[
                                         { key: 'Password', content: 'Password', active: true },
@@ -71,7 +71,7 @@ class Account extends Component {
                                 </Responsive>
                             </Segment.Group>
 
-                            <Segment.Group className={"bigglow"}>
+                            <Segment.Group>
                                 <Responsive as={Segment} inverted style={{backgroundColor: '#cabadf'}}>
                                     <Breadcrumb sections={[
                                         { key: 'Room', content: 'Room', active: true },
