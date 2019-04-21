@@ -1,8 +1,8 @@
-from .middlewares import login_required
-from flask import Flask, g
+# from .middlewares import login_required
+from flask import Flask, g, request, json
 from flask_cors import CORS
 import requests
-import json
+import json, copy
 
 from datetime import datetime, timedelta
 
@@ -19,60 +19,6 @@ production = False
 
 app = Flask(__name__)
 CORS(app)
-
-# @app.route("/kudos", methods=["GET"])
-# @login_required
-# def index():
-#  return json_response(Kudo(g.user).find_all_kudos())
-
-
-# @app.route("/kudos", methods=["POST"])
-# @login_required
-# def create():
-#    github_repo = GithubRepoSchema().load(json.loads(request.data))
-  
-#    if github_repo.errors:
-#      return json_response({'error': github_repo.errors}, 422)
-
-#    kudo = Kudo(g.user).create_kudo_for(github_repo)
-#    return json_response(kudo)
-
-
-# @app.route("/kudo/<int:repo_id>", methods=["GET"])
-# @login_required
-# def show(repo_id):
-#  kudo = Kudo(g.user).find_kudo(repo_id)
-
-#  if kudo:
-#    return json_response(kudo)
-#  else:
-#    return json_response({'error': 'kudo not found'}, 404)
-
-
-# @app.route("/kudo/<int:repo_id>", methods=["PUT"])
-# @login_required
-# def update(repo_id):
-#    github_repo = GithubRepoSchema().load(json.loads(request.data))
-  
-#    if github_repo.errors:
-#      return json_response({'error': github_repo.errors}, 422)
-
-#    kudo_service = Kudo(g.user)
-#    if kudo_service.update_kudo_with(repo_id, github_repo):
-#      return json_response(github_repo.data)
-#    else:
-#      return json_response({'error': 'kudo not found'}, 404)
-
-  
-# @app.route("/kudo/<int:repo_id>", methods=["DELETE"])
-# @login_required
-# def delete(repo_id):
-#  kudo_service = Kudo(g.user)
-#  if kudo_service.delete_kudo_for(repo_id):
-#    return json_response({})
-#  else:
-#    return json_response({'error': 'kudo not found'}, 404)
-
 
 def query_sparql(query):
     url = brick_url + api_endpoint + '/queries/sparql'
@@ -102,9 +48,7 @@ def query_data(uuid):
 
 def query_actuation(uuid, value):
     url = brick_url + api_endpoint + '/actuation/{0}'.format(uuid)
-    body = {
-        'value': value
-    }
+    body = { 'value': value }
     requests.post(url, json=body)
 
 
@@ -119,103 +63,142 @@ def extract(s, prefix_tagset):
     return s.replace(prefix_tagset, '')
 
 
+def json_model(key):
+    if key == "ebu3b":
+        return {
+            'college': 'UCSD',
+            'campus': 'Main',
+            'building': 'EBU3B'
+        }
+    return {}
+
+def iterate_extract(list, prefix_tagset):
+    res = []
+    for s in list:
+        fields = extract(s[0], prefix_tagset).lower().split("_rm_")
+        temp = copy.deepcopy(fields[0])
+        temp['room'] = fields[1]
+        res.append(temp)
+    return res
+
+
 def _get_current_user():
     if(production):
         return 'ebu3b:jasonkoh'
-    else:
-        return 'ebu3b:jasonkoh'
+    return 'ebu3b:jasonkoh'
 
 
-def _get_hvac_zone_point(tagset):
+def _get_hvac_zone_point(tagset, room):
     userkey = _get_current_user()
     q = PREFIX + """
     select ?s where {{
         {0} rdf:type brick:User .
-        {0} bf:hasOffice ?office .
-        ?office rdf:type brick:Room .
-        ?office bf:isPartOf ?zone .
+        {0} bf:hasOffice {1} .
+        {1} rdf:type brick:Room .
+        {1} bf:isPartOf ?zone .
         ?zone rdf:type brick:HVAC_Zone .
         ?s bf:isPointOf ?zone .
-        ?s rdf:type brick:{1} .
+        ?s rdf:type brick:{2} .
     }}
-    """.format(userkey, tagset)
+    """.format(userkey, room, tagset)
     res = query_sparql(q)['tuples']
     return extract(res[0][0], ebu3b_prefix) if res else None
 
 
-def _get_vav_point(tagset):
+def _get_vav_point(tagset, room):
     userkey = _get_current_user()
     q = PREFIX + """
     select ?s where {{
         {0} rdf:type brick:User .
-        {0} bf:hasOffice ?office .
-        ?office rdf:type brick:Room .
-        ?office bf:isPartOf ?zone .
+        {0} bf:hasOffice {1} .
+        {1} rdf:type brick:Room .
+        {1} bf:isPartOf ?zone .
         ?zone rdf:type brick:HVAC_Zone .
         ?vav bf:feeds ?zone .
         ?vav rdf:type brick:VAV .
         ?s bf:isPointOf ?vav .
-        ?s rdf:type brick:{1} .
+        ?s rdf:type brick:{2} .
     }}
-    """.format(userkey, tagset)
+    """.format(userkey, room, tagset)
     res = query_sparql(q)['tuples']
     return extract(res[0][0], ebu3b_prefix) if res else None
 
 
-def get_temperature_setpoint():
+def get_temperature_setpoint(room):
     tagset = 'Zone_Temperature_Setpoint'
-    return _get_vav_point(tagset)
+    return _get_vav_point(tagset, room)
 
 
-def get_zone_temperature_sensor():
+def get_zone_temperature_sensor(room):
     tagset = 'Zone_Temperature_Sensor'
-    return _get_hvac_zone_point(tagset)
+    return _get_hvac_zone_point(tagset, room)
 
 
-def get_thermal_power_sensor():
+def get_thermal_power_sensor(room):
     tagset = 'Thermostat_Adjust_Sensor'
-    return _get_hvac_zone_point(tagset)
+    return _get_hvac_zone_point(tagset, room)
 
 
-def get_occupancy_command():
+def get_occupancy_command(room):
     tagset = 'Occupancy_Command'
-    return _get_vav_point(tagset)
-
-
-def get_temperature():
-    uuid = get_temperature_setpoint()
-    return query_data(uuid)
-
-
-def get_room_temperature():
-    uuid = get_zone_temperature_sensor()
-    return query_data(uuid)
-
-
-def get_energy_usage():
-    uuid = get_thermal_power_sensor()
-    return query_data(uuid)
-
-
-def get_status():
-    uuid = get_occupancy_command()
-    return query_data(uuid)
-
-
-def set_status_on():
-    uuid = get_occupancy_command()
-    query_actuation(uuid, 3)
-
-
-def set_status_off():
-    uuid = get_occupancy_command()
-    query_actuation(uuid, 1)
-
-
-def set_temperature(temperature):
-    uuid = get_temperature_setpoint()
-    query_actuation(uuid, temperature)
+    return _get_vav_point(tagset, room)
 
 
 def json_response(payload, status=200):
  return (json.dumps(payload), status, {'content-type': 'application/json'})
+
+
+@app.route("/room", methods=["GET"])
+def get_all_rooms():
+    userkey = _get_current_user()
+    q = PREFIX + """
+    select ?s where {{
+        {0} rdf:type brick:User .
+        {0} bf:hasOffice ?s .
+        ?s rdf:type brick:Room .
+    }}
+    """.format(userkey)
+    res = query_sparql(q)['tuples']
+    rooms = iterate_extract(res, ebu3b_prefix) if res else []
+    return json_response({'rooms': rooms})
+
+
+@app.route("/point/setpoint/<room>", methods=["GET", "POST"])
+def temperature_setpoint(room):
+    uuid = get_temperature_setpoint(room)
+    if request.method == "GET":
+        value = query_data(uuid)
+        return json_response({'value': value})
+    req_data = request.get_json()
+    query_actuation(uuid, req_data['setpoint'])
+    return json_response({})
+
+
+@app.route("/point/temp/<room>", methods=["GET"])
+def get_room_temperature(room):
+    uuid = get_zone_temperature_sensor(room)
+    value = query_data(uuid)
+    return json_response({'value': value})
+
+
+@app.route("/point/energy/<room>", methods=["GET"])
+def get_energy_usage(room):
+    uuid = get_thermal_power_sensor(room)
+    value = query_data(uuid)
+    return json_response({'value': value})
+
+
+@app.route("/point/status/<room>", methods=["GET", "POST"])
+def status(room):
+    uuid = get_occupancy_command(room)
+    if request.method == "GET":
+        value = query_data(uuid)
+        return json_response({'value': value})
+    req_data = request.get_json()
+    # 3 means on, 1 means off
+    query_actuation(uuid, req_data['status'])
+    return json_response({})
+
+if __name__ == '__main__':
+    app.run()
+    print("finished")
