@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.18.0",
     "faker": "^4.1.0",
+    "history": "^4.9.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-input-slider": "^5.0.8",
@@ -13,11 +15,10 @@
     "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.8",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^0.86.0",
-    "history": "^4.9.0"
+    "semantic-ui-react": "^0.86.0"
   },
   "scripts": {
-    "start": "PORT=8080 react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
