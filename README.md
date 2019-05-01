@@ -5,26 +5,20 @@
 
 ### Installation
 
-1. Install yarn
-
-    ```
-    sudo apt-get update && sudo apt-get install yarn
-    ```
-
-2. Install Node.js
+1. Install Node.js
 
     ```
     curl --silent --location https://deb.nodesource.com/setup_6.x | sudo bash -
     sudo apt-get install --yes nodejs
     ```
 
-3. Install npm
+2. Install npm
 
     ```
     sudo apt-get install npm
     ```
     
-4. Install Gulp
+3. Install Gulp
     
     Gulp is providing command line tools for building themed versions of the library with just the components you need.<br>
     
@@ -32,7 +26,27 @@
     sudo npm install -g gulp
     ```
 
-### Execution
+### Application Execution
+
+1. Creates and activates virtual environment
+
+2. Install the Python dependencies
+
+    ```
+    pip install -r requirements.txt
+    ```
+
+3. Change the permission on execution.sh to make it executable
+    ```
+    chmod
+    ```
+
+4. Run the execution.sh to run the rest api and genie application
+    ```
+    ./execution.sh
+    ```
+
+### React Execution
 
 0. Installs the dependencies and development dependencies
 
