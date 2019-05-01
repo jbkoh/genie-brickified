@@ -1,6 +1,7 @@
 # from .middlewares import login_required
 import requests
 import json, copy
+import arrow
 
 from datetime import datetime, timedelta
 
@@ -28,10 +29,15 @@ with open('master_jwt_token.txt', 'r') as fp:
 #with open('data_admin_jwt_token', 'r') as fp:
     jwt_token = fp.read()
 
+
 headers = {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer ' + jwt_token,
 }
+
+
+def json_response(payload, status=200):
+ return (json.dumps(payload), status, {'content-type': 'application/json'})
 
 
 def query_sparql(qstr):
@@ -39,21 +45,30 @@ def query_sparql(qstr):
                         headers={ 'Content-Type': 'sparql-query'},
                         data=qstr
                         )
-    return resp.json()
+    if resp.status_code != 200:
+        return None
+    else:
+        return resp.json()
 
 
 def query_data(uuid):
-    begin_time = (datetime.utcnow() - timedelta(minutes=30)).strftime('%s')
-    end_time = datetime.utcnow().strftime('%s')
+    if(production):
+        start_time = (datetime.utcnow() - timedelta(minutes=30)).strftime('%s')
+        end_time = datetime.utcnow().strftime('%s')
+    else:
+        start_time = arrow.get(2019,3,1).timestamp
+        end_time = arrow.get(2019,3,30).timestamp
+
     params = {
-        'start_time': begin_time,
+        'start_time': start_time,
         'end_time': end_time,
     }
     resp = requests.get(ts_url + '/' + uuid,
                         params=params,
                         headers=headers,
                         )
-    print(resp)
+    if resp.status_code != 200:
+        return None
     data = resp.json()["data"]
     if data:
         data.sort(key=lambda d:d[1], reverse=True)
@@ -68,7 +83,9 @@ def query_actuation(uuid, value):
 
 
 def query_entity_tagset(uuid):
-    resp = requests.get(entity_url + '/' + uuid)
+    resp = requests.get(entity_url + '/' + uuid)    
+    if resp.status_code != 200:
+        return None    
     type = resp.json()["type"]
     return extract(type, brick_prefix) if type else None
 
@@ -117,7 +134,10 @@ def _get_hvac_zone_point(tagset, room, userkey):
         ?s rdf:type brick:{2} .
     }}
     """.format(userkey, room, tagset)
-    res = query_sparql(q)['tuples']
+    resp = query_sparql(q)
+    if resp == None:
+        return None
+    res = resp['tuples']
     return extract(res[0][0], ebu3b_prefix) if res else None
 
 
@@ -135,7 +155,10 @@ def _get_vav_point(tagset, room, userkey):
         ?s rdf:type brick:{2} .
     }}
     """.format(userkey, room, tagset)
-    res = query_sparql(q)['tuples']
+    resp = query_sparql(q)
+    if resp == None:
+        return None
+    res = resp['tuples']
     return extract(res[0][0], ebu3b_prefix) if res else None
 
 
@@ -150,8 +173,22 @@ def get_zone_temperature_sensor(room, user_email):
 
 
 def get_thermal_power_sensor(room, user_email):
-    tagset = 'Thermostat_Adjust_Sensor'
-    return _get_hvac_zone_point(tagset, room, user_email)
+    q = """
+    select ?s where {{
+        ?user user:hasEmail "{0}" .
+        ?user user:hasOffice {1} .
+        {1} rdf:type brick:Room .
+        {1} bf:isPartOf ?zone .
+        ?zone rdf:type brick:HVAC_Zone .
+        ?s bf:isPointOf ?zone .
+        ?s a/rdfs:subClassOf* brick:Power_Sensor .
+    }}
+    """.format(user_email, room)
+    resp = query_sparql(q)
+    if resp == None:
+        return None
+    res = resp['tuples']
+    return extract(res[0][0], ebu3b_prefix) if res else None
 
 
 def get_occupancy_command(room, user_email):
