@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import { Grid, Icon, Header, Segment, Divider, Statistic, Button } from 'semantic-ui-react';
 import './Segment.css';
 import Slider from 'react-input-slider';
@@ -114,9 +115,13 @@ class SegmentComponent extends Component {
   constructor(props, context) {
     super(props, context)
     this.state = {
-        status: 3,
-        temperature: 73
+        status: 1,
+        temperature: 73,
+        status_error: false,
+        setpoint_error: false
     }
+    this.get_status.bind(this)
+    this.get_temp_setpoint.bind(this)
   }
 
   toggleStatus = () => {
@@ -129,6 +134,48 @@ class SegmentComponent extends Component {
       this.setState({
         temperature: temperature
       })
+  }
+
+  get_status(option) {
+    const roomkey = option.building.value.toLowerCase() + ':' + 
+        option.building.value + '_Rm_' + option.room.value
+    axios.get('http://localhost:5000/point/status/' + roomkey)
+        .then(res => {
+            if(res != null 
+                && res.data != null 
+                && res.data['value'] != null) {
+                const resp = res.data;
+                this.setState({ status: resp['value'],
+                                status_error: false });
+            }
+            else {
+                this.setState({ status_error: true });
+            }
+        })
+  }
+
+  get_temp_setpoint(option) {
+    const roomkey = option.building.value.toLowerCase() + ':' + 
+        option.building.value + '_Rm_' + option.room.value
+    axios.get('http://localhost:5000/point/setpoint/' + roomkey)
+        .then(res => {
+            if(res != null 
+                && res.data != null 
+                && res.data['value'] != null) {
+                const resp = res.data;
+                this.setState({ temperature: resp['value'],
+                                setpoint_error: false });
+            }
+            else {
+                this.setState({ setpoint_error: true });
+            }
+        })
+  }
+
+  componentDidMount() {
+    const { option } = this.props;
+    this.get_status(option);
+    this.get_temp_setpoint(option);
   }
 
   render() {

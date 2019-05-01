@@ -1,16 +1,32 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router';
 import { Menu, Icon } from 'semantic-ui-react';
 import MyMenu from './MyMenu';
 import './TopMenu.css';
 
 class TopMenu extends Component {
-  state = { activeItem: 'home' };
+  state = { activeItem: 'home', user: 'User' };
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name });
 
+  componentDidMount() {
+    axios.get('http://localhost:5000/user')
+        .then(res => {
+            if(res != null 
+                && res.data != null 
+                && res.data['value'] != null) {
+                const resp = res.data;
+                this.setState({ user: resp['value'].name });
+            }
+            else {
+                this.setState({ user: 'User' });
+            }
+        })
+  }
+
   render() {
-    const { activeItem } = this.state;
+    const { activeItem, user } = this.state;
 
     let iconStyle = {
       margin: '0 10px 0 0'
@@ -18,7 +34,7 @@ class TopMenu extends Component {
 
     const trigger = (
       <span>
-        <Icon name="user" size="large" style={iconStyle} /> User
+        <Icon name="user" size="large" style={iconStyle} /> {user}
       </span>
     );
 
@@ -50,7 +66,7 @@ class TopMenu extends Component {
             onClick={this.handleItemClick} 
             active={activeItem === "setting"}
           >
-            <MyMenu trigger={trigger} switchAccount={this.props.switchAccount} />
+            <MyMenu trigger={trigger} switchAccount={this.props.switchAccount} user={user} />
           </Menu.Item>
         </Menu.Menu>
       </Menu>

@@ -26,7 +26,7 @@ def get_all_rooms():
     }}
     """.format(user_email)
     resp = query_sparql(q)
-    if resp.status_code != 200:
+    if resp == None:
         return json_response({'message': 'error'}, resp.status_code)
     res = resp['tuples']
     rooms = iterate_extract(res, ebu3b_prefix) if res else []
@@ -88,6 +88,12 @@ def set_status(room):
     # 3 means on, 1 means off
     query_actuation(uuid, req_data['status'])
     return json_response({})
+
+
+@app.route("/user", methods=["GET"])
+def get_current_user():
+    user = get_user(user_email)
+    return json_response({'value': user})
 
 
 if __name__ == '__main__':

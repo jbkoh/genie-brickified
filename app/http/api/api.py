@@ -107,7 +107,6 @@ def iterate_extract(list, prefix_tagset):
     res = []
     for s in list:
         fields = extract(s[0], prefix_tagset).lower().split("_rm_")
-        print(fields)
         temp = copy.deepcopy(json_model("ebu3b"))
         temp['room'] = fields[1]
         res.append(temp)

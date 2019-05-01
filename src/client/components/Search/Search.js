@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import { Grid, Dropdown, Segment, Divider, Icon, Button, Breadcrumb, List } from 'semantic-ui-react';
 import './Search.css';
 
 class Dashboard extends Component {
     state = {
-        openSearch: true
+        openSearch: true,
+        collegeOptions: [],
+        campusOptions: [],
+        buildingOptions: [],
+        roomOptions: [],
+        rooms: []
     }
 
     componentWillMount() {
@@ -12,11 +18,51 @@ class Dashboard extends Component {
             openSearch: JSON.parse(localStorage.getItem('openSearch'))
         })
     }
-  
+
+    optionObject(option) {
+        return {key: option, value: option, text: option}
+    }
+
     componentDidMount() {
       if(!localStorage.getItem('openSearch')) {
         //todo: fetch data
       }
+      axios.get('http://localhost:5000/room')
+        .then(res => {
+            if(res != null) {
+                const rooms = res.data;
+                this.setState({ rooms });
+                // eslint-disable-next-line array-callback-return
+                rooms['rooms'].map((room) => {
+                    const collegeOption = {key: room.college, value: room.college, text: room.college}
+                    const campusOption = {key: room.campus, value: room.campus, text: room.campus}
+                    const buildingOption = {key: room.building, value: room.building, text: room.building}
+                    const roomOption = {key: room.room, value: room.room, text: room.room}
+                    this.setState(
+                        state => {
+                            if(!state.collegeOptions.includes(collegeOption))
+                                state.collegeOptions.push(collegeOption)
+                            if(!state.campusOptions.includes(campusOption))
+                                state.campusOptions.push(campusOption)
+                            if(!state.buildingOptions.includes(buildingOption))
+                                state.buildingOptions.push(buildingOption)
+                            if(!state.roomOptions.includes(roomOption))
+                                state.roomOptions.push(roomOption)
+                            const collegeOptions = state.collegeOptions
+                            const campusOptions = state.campusOptions
+                            const buildingOptions = state.buildingOptions
+                            const roomOptions = state.roomOptions
+                            return {
+                                collegeOptions,
+                                campusOptions,
+                                buildingOptions,
+                                roomOptions
+                            }
+                        }
+                    )
+                })
+            }
+        })
     }
 
     componentWillUpdate(nextProps, nextState) {
@@ -24,24 +70,10 @@ class Dashboard extends Component {
     }
 
     render() {
-        const {openSearch} = this.state
+        const {openSearch, collegeOptions, campusOptions, buildingOptions, roomOptions} = this.state
         const {onAddItem, onRemoveItem, changeBuilding, changeCampus, changeCollege,
           changeRoom, options} = this.props
         const message = openSearch ? 'Hide Room List' : 'Show Room List'
-        const collegeOptions = [
-            {key: 'UCSD', value: 'UCSD', text: 'UCSD'},
-        ]
-        const campusOptions = [
-            {key: 'Main', value: 'Main', text: 'Main'},
-        ]
-        const buildingOptions = [
-            {key: 'EBU3B', value: 'EBU3B', text: 'EBU3B'},
-        ]
-        const roomOptions = [
-            {key: '2140', value: '2140', text: '2140'},
-            {key: '2150', value: '2150', text: '2150'},
-            {key: '2160', value: '2160', text: '2160'},
-        ]
         const table = (openSearch) ? (
             options.map((option, index) => (
                 <List.Item floated="left">
@@ -72,16 +104,16 @@ class Dashboard extends Component {
                                     <Grid.Column>
                                         <Button icon="search" basic style={{marginRight: 3}} />
                                         <Dropdown placeholder='College' clearable search selection options={collegeOptions} 
-                                        onChange={changeCollege} compact />
+                                        onChange={changeCollege} style={{minWidth: 90}} />
                                         <Icon name='right angle' />
                                         <Dropdown placeholder='Campus' clearable search selection options={campusOptions} 
-                                        onChange={changeCampus} compact />
+                                        onChange={changeCampus} style={{minWidth: 90}} />
                                         <Icon name='right angle' />
                                         <Dropdown placeholder='Building' clearable search selection options={buildingOptions} 
-                                        onChange={changeBuilding} compact />
+                                        onChange={changeBuilding} style={{minWidth: 90}} />
                                         <Icon name='right angle' />
                                         <Dropdown placeholder='Room' clearable search selection options={roomOptions} 
-                                        onChange={changeRoom} compact />
+                                        onChange={changeRoom} style={{minWidth: 90}} />
                                         <Button size="small" color="green" compact style={{
                                             marginLeft: 15
                                         }} onClick={onAddItem} basic>Add</Button>

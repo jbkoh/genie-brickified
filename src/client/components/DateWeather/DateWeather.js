@@ -91,7 +91,7 @@ class DateWeather extends Component {
                                     paddingTop: 10
                                 }} >
                                     <Header className={"dashboard"}>
-                                        {"63.8" + "°F"}
+                                        {"63.8 °F"}
                                     </Header>
                                 </Grid.Row>
                             </Grid.Column>

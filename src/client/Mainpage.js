@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import LeftMenu from './components/LeftMenu/LeftMenu';
 import TopMenu from './components/TopMenu/TopMenu';
 import Dashboard from './Dashboard';
@@ -96,7 +97,8 @@ class Main extends Component {
   state = {
     options: [],
     temp: {},
-    account: false
+    account: false,
+    rooms: []
   }
 
   switchAccount = (option) => {
@@ -146,10 +148,20 @@ class Main extends Component {
   onAddItem = () => {
       this.setState(
           state => {
-              if(!state.options.some(o => (o.college.value === state.temp.college.value
+              if(state.rooms.some(o => (o.college === state.temp.college.value
+                                      && o.campus === state.temp.campus.value
+                                      && o.building === state.temp.building.value
+                                      && o.room === state.temp.room.value))
+                && state.temp.college.value != null
+                && state.temp.campus.value != null
+                && state.temp.building.value != null
+                && state.temp.room.value != null
+                && !state.options.some(o => (o.college.value === state.temp.college.value
                                       && o.campus.value === state.temp.campus.value
                                       && o.building.value === state.temp.building.value
-                                      && o.room.value === state.temp.room.value)))
+                                      && o.room.value === state.temp.room.value))
+
+                )
                   state.options.push(state.temp)
               const options = state.options
               return {
@@ -185,6 +197,13 @@ class Main extends Component {
     if(!localStorage.getItem('temp')) {
       //todo: fetch data
     }
+    axios.get('http://localhost:5000/room')
+      .then(res => {
+          if(res != null) {
+              const resp = res.data;
+              this.setState({ rooms: resp['rooms'] });
+          }
+      })
   }
 
   componentWillUpdate(nextProps, nextState) {

@@ -15,7 +15,7 @@ class Dashboard extends Component {
         Please Add Room
       </Message>
     ) : (<div></div>)
-
+    
     return (
       <Grid container={this.props.mobile} stackable={this.props.mobile}>
         <Grid.Row>
