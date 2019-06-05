@@ -26,9 +26,9 @@ production = False
 
 
 #with open('master_jwt_token', 'r') as fp:
-with open('genie_master_token.txt', 'r') as fp:
+with open('genie_master_token', 'r') as fp:
 #with open('data_admin_jwt_token', 'r') as fp:
-#with open('VEnergy_master_token.txt', 'r') as fp:
+#with open('VEnergy_master_token', 'r') as fp:
     jwt_token = fp.read()
 
 user_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhcHBfaWQiOiIiLCJ1c2VyX2lkIjoiamJrb2hAZW5nLnVjc2QuZWR1IiwiZXhwIjoxNTY3NDUzMTcyLjE3OTQyMTJ9.gft6RTyf2L5sbaAtXd_ajujBvpMW6E9qhc-nPEXjXybWbXBbf_pwWNZXDIkQcETnwnLOiXAeQKEvFiOsxVd_lPyktpDRAnEkNbA63EoLTkumooRaEHhvxkC713uFwsszBQehfWCGbonaDFwpjVo6Cv3lIKUx3NxcMRjLOvZqPamRrut_WYDjADAkkjA2XreZg3rvkBmlHX-995YhVcAAJTOQHvRh7_TcMGZe25X9lXfUnLOEcgsaEjNdLZa_NsHzrj9ciCKoV6EiRiiNH21GOwx_sb_4QPNpHdnmZfSO4NDApu2gqwtnxmB93cyiSD7lDk3MvDxtBtNw2QKJzNR7hSqKaqlewaryfNmtmvKxIFaL-kD-rL9Yt4uVqjvB2CVWt56IS36cM768JqSiYyteom1hw5VnGfJWGfPHepNpG0L6xCPMIfJB3DniuRU5y1RXWbNVkX9vosdAMmonqBcwquVJ_UtJ2rdNFBZC3OlNoV2nmLMhwIRZ-J_e09D0wo0Glrgwh__t_J0BbpM1aXWJECUN-ynVzf-CCd_YWKJY9-QljAiKDhvoJgUlV_K8iuOxDIrn2HHSf842vO50tQcX_GBr8XsGrPnPNogh-ay0Ymz4wPPfVBT4KRBw-ghO6Q0ZCHabRFDUIp1K4O20GFHww9QoOeqBcItNm_0hYm4tjCc'
