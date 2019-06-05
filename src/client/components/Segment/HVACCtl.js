@@ -125,12 +125,17 @@ class SegmentComponent extends Component {
   }
 
   toggleStatus = () => {
+    const { option } = this.props;
+    const status = (this.state.status === 3) ? 1 : 3
+    this.set_status(option, status)
       this.setState({
-        status: (this.state.status === 3) ? 1 : 3
+        status: status
       })
   }
 
   handleChangeTemp = (temperature) => {
+      const { option } = this.props;
+      this.set_temp_setpoint(option, temperature)
       this.setState({
         temperature: temperature
       })
@@ -170,6 +175,30 @@ class SegmentComponent extends Component {
                 this.setState({ setpoint_error: true });
             }
         })
+  }
+
+  set_status(option, status) {
+    const roomkey = option.building.value.toLowerCase() + ':' + 
+        option.building.value + '_Rm_' + option.room.value
+    axios.post('http://localhost:5000/point/status/' + roomkey, { value: status })
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+  }
+
+  set_temp_setpoint(option, temp) {
+    const roomkey = option.building.value.toLowerCase() + ':' + 
+        option.building.value + '_Rm_' + option.room.value
+    axios.post('http://localhost:5000/point/setpoint/' + roomkey, { value: temp })
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
   }
 
   componentDidMount() {

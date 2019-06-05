@@ -79,7 +79,8 @@ def query_data(uuid):
 
 def query_actuation(uuid, value):
     body = { 'value': value }
-    requests.post(actuation_url + '/' + uuid, json=body)
+    resp = requests.post(actuation_url + '/' + uuid, json=body)
+    print(resp)
 
 
 def query_entity_tagset(uuid):
