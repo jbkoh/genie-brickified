@@ -127,7 +127,7 @@ class SegmentComponent extends Component {
   toggleStatus = () => {
     const { option } = this.props;
     const status = (this.state.status === 3) ? 1 : 3
-    this.set_status(option, status)
+    this.set_status(option, status.toString())
       this.setState({
         status: status
       })

@@ -48,8 +48,8 @@ def set_temp_setpoint(room):
     if uuid == None:
         return json_response({'value': None})
     req_data = request.get_json()
-    query_actuation(uuid, req_data['setpoint'])
-    return json_response({})
+    query_actuation(uuid, req_data['value'])
+    return json_response({'value': req_data['value']})
 
 
 @app.route("/point/temp/<room>", methods=["GET"])
@@ -86,7 +86,7 @@ def set_status(room):
         return json_response({'value': None})
     req_data = request.get_json()
     # 3 means on, 1 means off
-    query_actuation(uuid, req_data['value'])
+    resp = query_actuation(uuid, req_data['value'])
     return json_response({'value': req_data['value']})
 
 

@@ -25,16 +25,18 @@ ebu3b_prefix = 'http://ucsd.edu/building/ontology/ebu3b#'
 production = False
 
 
-with open('master_jwt_token.txt', 'r') as fp:
+#with open('master_jwt_token', 'r') as fp:
+with open('genie_master_token.txt', 'r') as fp:
 #with open('data_admin_jwt_token', 'r') as fp:
+#with open('VEnergy_master_token.txt', 'r') as fp:
     jwt_token = fp.read()
 
+user_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhcHBfaWQiOiIiLCJ1c2VyX2lkIjoiamJrb2hAZW5nLnVjc2QuZWR1IiwiZXhwIjoxNTY3NDUzMTcyLjE3OTQyMTJ9.gft6RTyf2L5sbaAtXd_ajujBvpMW6E9qhc-nPEXjXybWbXBbf_pwWNZXDIkQcETnwnLOiXAeQKEvFiOsxVd_lPyktpDRAnEkNbA63EoLTkumooRaEHhvxkC713uFwsszBQehfWCGbonaDFwpjVo6Cv3lIKUx3NxcMRjLOvZqPamRrut_WYDjADAkkjA2XreZg3rvkBmlHX-995YhVcAAJTOQHvRh7_TcMGZe25X9lXfUnLOEcgsaEjNdLZa_NsHzrj9ciCKoV6EiRiiNH21GOwx_sb_4QPNpHdnmZfSO4NDApu2gqwtnxmB93cyiSD7lDk3MvDxtBtNw2QKJzNR7hSqKaqlewaryfNmtmvKxIFaL-kD-rL9Yt4uVqjvB2CVWt56IS36cM768JqSiYyteom1hw5VnGfJWGfPHepNpG0L6xCPMIfJB3DniuRU5y1RXWbNVkX9vosdAMmonqBcwquVJ_UtJ2rdNFBZC3OlNoV2nmLMhwIRZ-J_e09D0wo0Glrgwh__t_J0BbpM1aXWJECUN-ynVzf-CCd_YWKJY9-QljAiKDhvoJgUlV_K8iuOxDIrn2HHSf842vO50tQcX_GBr8XsGrPnPNogh-ay0Ymz4wPPfVBT4KRBw-ghO6Q0ZCHabRFDUIp1K4O20GFHww9QoOeqBcItNm_0hYm4tjCc'
 
 headers = {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer ' + jwt_token,
 }
-
 
 def json_response(payload, status=200):
  return (json.dumps(payload), status, {'content-type': 'application/json'})
@@ -79,12 +81,12 @@ def query_data(uuid):
 
 def query_actuation(uuid, value):
     body = { 'value': value }
-    resp = requests.post(actuation_url + '/' + uuid, json=body)
-    print(resp)
+    resp = requests.post(actuation_url + '/' + uuid, json=body, headers=headers)
+    print(resp.json())
 
 
 def query_entity_tagset(uuid):
-    resp = requests.get(entity_url + '/' + uuid)    
+    resp = requests.get(entity_url + '/' + uuid, headers=headers)    
     if resp.status_code != 200:
         return None    
     type = resp.json()["type"]
@@ -115,7 +117,7 @@ def iterate_extract(list, prefix_tagset):
 
 
 def get_user(email):
-    res = requests.get(user_url + '/' + email)
+    res = requests.get(user_url + '/' + email, headers=headers)
     if res.status_code == 200:
         return res.json()
     else:
