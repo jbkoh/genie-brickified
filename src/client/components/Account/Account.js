@@ -46,34 +46,6 @@ class Account extends Component {
                             <Segment.Group>
                                 <Responsive as={Segment} inverted style={{backgroundColor: '#cabadf'}}>
                                     <Breadcrumb sections={[
-                                        { key: 'Password', content: 'Password', active: true },
-                                        ]} style={{color: '#563d7c'}} />
-                                </Responsive>
-                                <Responsive as={Segment}>
-                                    <Form>
-                                        <Form.Field>
-                                            <label>Old Password</label>
-                                            <input placeholder='Old Password' type='password' />
-                                        </Form.Field>
-                                        <Form.Field>
-                                            <label>New Password</label>
-                                            <input placeholder='New Password' type='password' />
-                                        </Form.Field>
-                                        <Form.Field>
-                                            <label>New Password (Again)</label>
-                                            <input placeholder='New Password (Again)' type='password' />
-                                        </Form.Field>
-                                        <Form.Field>
-                                            <Checkbox label='I agree to the Terms and Conditions' />
-                                        </Form.Field>
-                                        <Button color="green" basic type='submit'>Change</Button>
-                                    </Form>
-                                </Responsive>
-                            </Segment.Group>
-
-                            <Segment.Group>
-                                <Responsive as={Segment} inverted style={{backgroundColor: '#cabadf'}}>
-                                    <Breadcrumb sections={[
                                         { key: 'Room', content: 'Room', active: true },
                                         ]} style={{color: '#563d7c'}} />
                                 </Responsive>

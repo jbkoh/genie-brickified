@@ -6,8 +6,8 @@ import jwt
 import arrow
 from flask import Flask, redirect, url_for, session, request, jsonify
 
-PORT = 9001
-# PORT = 7889
+# PORT = 9001
+PORT = 7889
 APP = 'testapp'
 
 REDIRECT_URI = '/oauth2callback'
