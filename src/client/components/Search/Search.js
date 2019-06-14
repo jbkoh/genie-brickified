@@ -27,7 +27,7 @@ class Dashboard extends Component {
       if(!localStorage.getItem('openSearch')) {
         //todo: fetch data
       }
-      axios.get('http://localhost:5000/room')
+      axios.get('/room')
         .then(res => {
             if(res != null) {
                 const rooms = res.data;

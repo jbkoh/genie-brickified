@@ -113,6 +113,9 @@ def authorized():
     return jsonify({"data": me.data})
 
 if __name__ == '__main__':
+    ssl_context = ('/home/renxu/fullchain.pem',
+                   '/home/renxu/privkey.pem')
     app.run(host='0.0.0.0',
-            port=9889,
+            port=6000,
+            ssl_context=ssl_context,
             )

@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 import "semantic-ui-css/semantic.min.css";
 
@@ -136,7 +136,23 @@ HomepageHeading.propTypes = {
  * It can be more complicated, but you can create really flexible markup.
  */
 class DesktopContainer extends Component {
-  state = {activeItem: "home"};
+  state = {
+    activeItem: "home",
+    redirect: false
+  };
+
+
+  setRedirect = () => {
+    this.setState({
+      redirect: true
+    })
+  }
+
+  renderRedirect = () => {
+    if (this.state.redirect) {
+      return <Redirect to='/login' />
+    }
+  }
 
   hideFixedMenu = () => this.setState({ fixed: false });
   showFixedMenu = () => this.setState({ fixed: true });
@@ -148,6 +164,7 @@ class DesktopContainer extends Component {
 
     return (
       <Responsive minWidth={Responsive.onlyTablet.minWidth} >
+	{this.renderRedirect()}
         <Visibility
           once={false}
           onBottomPassed={this.showFixedMenu}
@@ -181,7 +198,7 @@ class DesktopContainer extends Component {
                   About
                 </Menu.Item>
                 <Menu.Item position="right">
-                  <Button as="a" inverted={!fixed}>
+                  <Button as="a" inverted={!fixed} onClick={this.setRedirect}>
                     Log in
                   </Button>
                 </Menu.Item>
@@ -203,7 +220,23 @@ DesktopContainer.propTypes = {
 };
 
 class MobileContainer extends Component {
-  state = {activeItem: "home"};
+  state = {
+    activeItem: "home",
+    redirect: false
+  };
+
+
+  setRedirect = () => {
+    this.setState({
+      redirect: true
+    })
+  }
+
+  renderRedirect = () => {
+    if (this.state.redirect) {
+      return <Redirect to='/login' />
+    }
+  }
 
   handlePusherClick = () => {
     const { sidebarOpened } = this.state;
@@ -222,6 +255,7 @@ class MobileContainer extends Component {
 
     return (
       <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
+	{this.renderRedirect()}
         <Sidebar.Pushable>
           <Sidebar
             as={Menu}
@@ -266,7 +300,7 @@ class MobileContainer extends Component {
                     <Icon name="sidebar" />
                   </Menu.Item>
                   <Menu.Item position="right">
-                    <Button as="a" inverted>
+                    <Button as="a" inverted onClick={this.setRedirect}>
                       Log in
                     </Button>
                   </Menu.Item>

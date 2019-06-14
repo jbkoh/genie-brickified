@@ -108,7 +108,7 @@ class SegmentComponent extends Component {
   get_energy_usage(option) {
     const roomkey = option.building.value.toLowerCase() + ':' + 
         option.building.value + '_Rm_' + option.room.value
-    axios.get('http://localhost:5000/point/energy/' + roomkey)
+    axios.get('/point/energy/' + roomkey)
         .then(res => {
             if(res != null 
                 && res.data != null 
@@ -126,7 +126,7 @@ class SegmentComponent extends Component {
   get_room_temperature(option) {
     const roomkey = option.building.value.toLowerCase() + ':' + 
         option.building.value + '_Rm_' + option.room.value
-    axios.get('http://localhost:5000/point/temp/' + roomkey)
+    axios.get('/point/temp/' + roomkey)
         .then(res => {
             if(res != null 
                 && res.data != null 

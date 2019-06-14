@@ -16,6 +16,10 @@ class App extends Component {
           <Switch>
             <Route exact path="/" component={Home} />
             <Route path="/main" component={Main} />
+          <Route path='/login' component={() => {
+              window.location.href = 'https://bd-testbed.ucsd.edu:5000/log';
+              return null;
+          }}/>
           </Switch>
         </div>
       </Router>

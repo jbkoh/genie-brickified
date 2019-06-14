@@ -197,7 +197,7 @@ class Main extends Component {
     if(!localStorage.getItem('temp')) {
       //todo: fetch data
     }
-    axios.get('http://localhost:5000/room')
+    axios.get('/room')
       .then(res => {
           if(res != null) {
               const resp = res.data;

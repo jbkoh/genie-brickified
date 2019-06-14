@@ -11,7 +11,7 @@ class TopMenu extends Component {
   handleItemClick = (e, { name }) => this.setState({ activeItem: name });
 
   componentDidMount() {
-    axios.get('http://localhost:5000/user')
+    axios.get('/user')
         .then(res => {
             if(res != null 
                 && res.data != null 

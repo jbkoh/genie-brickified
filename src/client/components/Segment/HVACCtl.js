@@ -144,7 +144,7 @@ class SegmentComponent extends Component {
   get_status(option) {
     const roomkey = option.building.value.toLowerCase() + ':' + 
         option.building.value + '_Rm_' + option.room.value
-    axios.get('http://localhost:5000/point/status/' + roomkey)
+    axios.get('/point/status/' + roomkey)
         .then(res => {
             if(res != null 
                 && res.data != null 
@@ -162,7 +162,7 @@ class SegmentComponent extends Component {
   get_temp_setpoint(option) {
     const roomkey = option.building.value.toLowerCase() + ':' + 
         option.building.value + '_Rm_' + option.room.value
-    axios.get('http://localhost:5000/point/setpoint/' + roomkey)
+    axios.get('/point/setpoint/' + roomkey)
         .then(res => {
             if(res != null 
                 && res.data != null 
@@ -180,7 +180,7 @@ class SegmentComponent extends Component {
   set_status(option, status) {
     const roomkey = option.building.value.toLowerCase() + ':' + 
         option.building.value + '_Rm_' + option.room.value
-    axios.post('http://localhost:5000/point/status/' + roomkey, { value: status })
+    axios.post('/point/status/' + roomkey, { value: status })
         .then(function (response) {
             console.log(response);
         })
@@ -192,7 +192,7 @@ class SegmentComponent extends Component {
   set_temp_setpoint(option, temp) {
     const roomkey = option.building.value.toLowerCase() + ':' + 
         option.building.value + '_Rm_' + option.room.value
-    axios.post('http://localhost:5000/point/setpoint/' + roomkey, { value: temp })
+    axios.post('/point/setpoint/' + roomkey, { value: temp })
         .then(function (response) {
             console.log(response);
         })
