@@ -63,7 +63,7 @@ const SegmentObject = ({icon, color, title, value, label, handleChangeTemp, mobi
     </Segment>
 );
 
-const SwitchObject = ({icon, color, title, value, toggleStatus, mobile}) => (
+const SwitchObject = ({icon, color, title, value, toggleStatus, mobile, loading}) => (
     <Segment className={"glowfloat"} raised style={{minHeight: "204px"}} color="teal">
         <Grid>
             <Grid.Row>
@@ -91,7 +91,7 @@ const SwitchObject = ({icon, color, title, value, toggleStatus, mobile}) => (
                     <Grid.Row style={{
                         marginTop: 15,
                     }} >
-                        <Button icon labelPosition='right' 
+                        <Button icon labelPosition='right' loading={loading}
                             color={value === "OFF" ? 'blue' : 'red'} onClick={toggleStatus} 
                             style={{width: '100% !important'}}>
                             {value === "OFF" ? "Turn On" : "Turn Off"}
@@ -118,7 +118,8 @@ class SegmentComponent extends Component {
         status: 1,
         temperature: 73,
         status_error: false,
-        setpoint_error: false
+        setpoint_error: false,
+        loading: false
     }
     this.get_status.bind(this)
     this.get_temp_setpoint.bind(this)
@@ -127,10 +128,8 @@ class SegmentComponent extends Component {
   toggleStatus = () => {
     const { option } = this.props;
     const status = (this.state.status === 3) ? 1 : 3
-    this.set_status(option, status.toString())
-      this.setState({
-        status: status
-      })
+    this.setState({loading: true})
+    this.set_status(option, status.toString(), status)
   }
 
   handleChangeTemp = (temperature) => {
@@ -177,12 +176,15 @@ class SegmentComponent extends Component {
         })
   }
 
-  set_status(option, status) {
+  set_status(option, status, numStatus) {
     const roomkey = option.building.value.toLowerCase() + ':' + 
         option.building.value + '_Rm_' + option.room.value
     axios.post('/point/status/' + roomkey, { value: status })
-        .then(function (response) {
-            console.log(response);
+        .then(res => {
+            this.setState({
+              status: numStatus,
+              loading: false
+            })
         })
         .catch(function (error) {
             console.log(error);
@@ -208,7 +210,7 @@ class SegmentComponent extends Component {
   }
 
   render() {
-    const { status, temperature } = this.state;
+    const { status, temperature, loading } = this.state;
     return (
         <Grid container={this.props.mobile} stackable={this.props.mobile}>
             <Grid.Row>
@@ -224,7 +226,7 @@ class SegmentComponent extends Component {
                 <Grid.Column width={8} >
                     <SwitchObject icon={"power off"} color={"rgb(143, 201, 251)"} 
                         title={"Status"} value={(status === 3) ? "ON" : "OFF"}
-                        toggleStatus={this.toggleStatus} mobile={this.props.mobile} />
+                        toggleStatus={this.toggleStatus} mobile={this.props.mobile} loading={loading} />
                 </Grid.Column>
                 <Grid.Column width={8} >
                     <SegmentObject icon={"thermometer quarter"} color={"rgb(248, 200, 46)"} 
