@@ -17,7 +17,7 @@ user_email = 'jbkoh@ucsd.edu'
 production = False
 
 PORT = 7889
-APP = 'Genie'
+APP = 'genie'
 
 REDIRECT_URI = '/oauth2callback'
 AUTH_URL = 'https://bd-testbed.ucsd.edu:{0}/api/v1/auth/login/{1}'.format(PORT, APP)
