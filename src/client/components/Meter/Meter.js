@@ -40,10 +40,10 @@ class Meter extends Component {
                 <Grid container={this.props.mobile} stackable={this.props.mobile}>
                     <Grid.Row columns={2}>
                         <Grid.Column width={8}>
-                            <EnvInfo title={"Environment Information"} option={option} mobile={this.props.mobile} />
+                            <EnvInfo title={"Environment Information"} option={option} mobile={this.props.mobile} user_email={this.props.user_email} />
                         </Grid.Column>
                         <Grid.Column width={8}>
-                            <HVACCtl title={"HVAC Control"} option={option} mobile={this.props.mobile} />
+                            <HVACCtl title={"HVAC Control"} option={option} mobile={this.props.mobile} user_email={this.props.user_email} />
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>

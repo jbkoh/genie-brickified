@@ -11,7 +11,13 @@ class TopMenu extends Component {
   handleItemClick = (e, { name }) => this.setState({ activeItem: name });
 
   componentDidMount() {
-    axios.get('/user')
+	  const {user_email} = this.props
+	  if(user_email !== null) { 
+    axios.get('/user', {
+    	params: {
+		user_email: user_email
+	}
+    })
         .then(res => {
             if(res != null 
                 && res.data != null 
@@ -23,6 +29,7 @@ class TopMenu extends Component {
                 this.setState({ user: 'User' });
             }
         })
+	  } 
   }
 
   render() {

@@ -7,24 +7,25 @@ import './css/Mainpage.css';
 import {Responsive} from 'semantic-ui-react';
 import PropTypes from "prop-types";
 import Account from './components/Account/Account'
+import { Redirect } from "react-router-dom";
 
 class DesktopContainer extends Component {
   render() {
     const {onAddItem, onRemoveItem, changeBuilding, changeCampus, changeCollege,
-      changeRoom, account, switchAccount} = this.props
+      changeRoom, account, switchAccount, user_email} = this.props
     const main = account ? (
       <div className="main-container">
         <Account mobile={false} options={this.props.options} updateOptions={this.props.updateOptions} 
       onAddItem={onAddItem} onRemoveItem={onRemoveItem} 
       changeBuilding={changeBuilding} changeCampus={changeCampus}
-      changeCollege={changeCollege} changeRoom={changeRoom} />
+      changeCollege={changeCollege} changeRoom={changeRoom} user_email={user_email} />
       </div>
     ) : (
       <div className="main-container">
         <Dashboard mobile={false} options={this.props.options} updateOptions={this.props.updateOptions} 
       onAddItem={onAddItem} onRemoveItem={onRemoveItem} 
       changeBuilding={changeBuilding} changeCampus={changeCampus}
-      changeCollege={changeCollege} changeRoom={changeRoom} />
+      changeCollege={changeCollege} changeRoom={changeRoom}  user_email={user_email} />
       </div>
     );
     return (
@@ -44,25 +45,25 @@ DesktopContainer.propTypes = {
 class MobileContainer extends Component {
   render() {
     const {onAddItem, onRemoveItem, changeBuilding, changeCampus, changeCollege,
-      changeRoom, account, switchAccount} = this.props
+      changeRoom, account, switchAccount, user_email} = this.props
       const main = account ? (
         <div className="mobile-container">
           <Account mobile={true} options={this.props.options} updateOptions={this.props.updateOptions} 
         onAddItem={onAddItem} onRemoveItem={onRemoveItem} 
         changeBuilding={changeBuilding} changeCampus={changeCampus}
-        changeCollege={changeCollege} changeRoom={changeRoom} />
+        changeCollege={changeCollege} changeRoom={changeRoom}  user_email={user_email} />
         </div>
       ) : (
         <div className="mobile-container">
           <Dashboard mobile={true} options={this.props.options} updateOptions={this.props.updateOptions} 
         onAddItem={onAddItem} onRemoveItem={onRemoveItem} 
         changeBuilding={changeBuilding} changeCampus={changeCampus}
-        changeCollege={changeCollege} changeRoom={changeRoom} />
+        changeCollege={changeCollege} changeRoom={changeRoom}  user_email={user_email} />
         </div>
       );
     return (
       <Responsive maxWidth={1135}>
-        <TopMenu switchAccount={switchAccount} />
+        <TopMenu switchAccount={switchAccount} user_email={user_email} />
         {main}
       </Responsive>
     );
@@ -74,18 +75,18 @@ MobileContainer.propTypes = {
 };
 
 const ResponsiveContainer = ({ children, options, updateOptions, onAddItem, onRemoveItem, changeBuilding,
-changeCampus, changeCollege, changeRoom, account, switchAccount }) => (
+changeCampus, changeCollege, changeRoom, account, switchAccount, user_email }) => (
   <div>
     <DesktopContainer options={options} updateOptions={updateOptions} 
         onAddItem={onAddItem} onRemoveItem={onRemoveItem} 
         changeBuilding={changeBuilding} changeCampus={changeCampus}
         changeCollege={changeCollege} changeRoom={changeRoom}
-        account={account} switchAccount={switchAccount} >{children}</DesktopContainer>
+        account={account} switchAccount={switchAccount}  user_email={user_email} >{children}</DesktopContainer>
     <MobileContainer options={options} updateOptions={updateOptions} 
         onAddItem={onAddItem} onRemoveItem={onRemoveItem} 
         changeBuilding={changeBuilding} changeCampus={changeCampus}
         changeCollege={changeCollege} changeRoom={changeRoom}
-        account={account} switchAccount={switchAccount} >{children}</MobileContainer>
+        account={account} switchAccount={switchAccount}  user_email={user_email} >{children}</MobileContainer>
   </div>
 );
 
@@ -98,8 +99,61 @@ class Main extends Component {
     options: [],
     temp: {},
     account: false,
-    rooms: []
+    rooms: [],
+    user_email: null,
+    redirect: false
   }
+
+    sessionGet = (key) => {
+      let stringValue = window.sessionStorage.getItem(key)
+      if(stringValue !== null) {
+        let value = JSON.parse(stringValue)
+        let expirationDate = new Date(value.expirationDate)
+        if(expirationDate > new Date()) {
+          return value.value;
+        }
+        else {
+          window.sessionStorage.removeItem(key)
+        }
+      }
+      return null
+    }
+
+    sessionSet = (key, value, expirationInMin = 360) => {
+      let expirationDate = new Date(new Date().getTime() + (60000 * expirationInMin))
+      let newValue = {
+        value: value,
+        expirationDate: expirationDate.toISOString()
+      }
+      window.sessionStorage.setItem(key, JSON.stringify(newValue))
+    }
+
+    loginRedirect = () => {
+      if (window.location.search !== "") {
+        this.sessionSet("user_token", window.location.search.slice(19))
+      }
+      let user_token = this.sessionGet("user_token")
+      if(user_token === null) {
+	this.setState({redirect: false})
+        return <Redirect to='/' />
+      }
+      else if(!this.state.redirect){
+	axios.get('/redirected', {
+		params: {
+			user_access_token: user_token
+		}
+	})
+          .then((res) => {
+	    this.setState({
+		user_email: res,
+	    	redirect: true
+	    })
+          })
+          .catch((err) => {
+	    console.log(err)
+          })
+      }
+    }
 
   switchAccount = (option) => {
     this.setState({account: option})
@@ -197,13 +251,21 @@ class Main extends Component {
     if(!localStorage.getItem('temp')) {
       //todo: fetch data
     }
-    axios.get('/room')
+    if(this.state.user_email !== null) {
+	    console.log("hello")
+	    console.log(this.state.user_email)
+    axios.get('/room', {
+    	params: {
+		user_email: this.state.user_email
+	}
+    })
       .then(res => {
           if(res != null) {
               const resp = res.data;
               this.setState({ rooms: resp['rooms'] });
           }
       })
+   }
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -212,13 +274,16 @@ class Main extends Component {
   }
 
   render() {
-    const {options, account} = this.state;
+    const {options, account, user_email} = this.state;
     return (
+	<div>
+            {this.loginRedirect()}
       <ResponsiveContainer options={options} updateOptions={this.updateOptions} 
         onAddItem={this.onAddItem} onRemoveItem={this.onRemoveItem} 
         changeBuilding={this.changeBuilding} changeCampus={this.changeCampus}
         changeCollege={this.changeCollege} changeRoom={this.changeRoom}
-        account={account} switchAccount={this.switchAccount} />
+        account={account} switchAccount={this.switchAccount} user_email={user_email} />
+	    </div>
     );
   }
 }

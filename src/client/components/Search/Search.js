@@ -27,7 +27,13 @@ class Dashboard extends Component {
       if(!localStorage.getItem('openSearch')) {
         //todo: fetch data
       }
-      axios.get('/room')
+      const {user_email} = this.props
+      if(user_email !== null) {
+      axios.get('/room', {
+      	params: {
+		user_email: user_email
+	}
+      })
         .then(res => {
             if(res != null) {
                 const rooms = res.data;
@@ -63,6 +69,7 @@ class Dashboard extends Component {
                 })
             }
         })
+      }
     }
 
     componentWillUpdate(nextProps, nextState) {
@@ -72,7 +79,7 @@ class Dashboard extends Component {
     render() {
         const {openSearch, collegeOptions, campusOptions, buildingOptions, roomOptions} = this.state
         const {onAddItem, onRemoveItem, changeBuilding, changeCampus, changeCollege,
-          changeRoom, options} = this.props
+          changeRoom, options, user_email} = this.props
         const message = openSearch ? 'Hide Room List' : 'Show Room List'
         const table = (openSearch) ? (
             options.map((option, index) => (

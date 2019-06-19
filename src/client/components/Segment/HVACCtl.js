@@ -140,10 +140,14 @@ class SegmentComponent extends Component {
       })
   }
 
-  get_status(option) {
+  get_status(option, user_email) {
     const roomkey = option.building.value.toLowerCase() + ':' + 
         option.building.value + '_Rm_' + option.room.value
-    axios.get('/point/status/' + roomkey)
+    axios.get('/point/status/' + roomkey, {
+    	params: {
+		user_email: user_email
+	}
+    })
         .then(res => {
             if(res != null 
                 && res.data != null 
@@ -158,10 +162,14 @@ class SegmentComponent extends Component {
         })
   }
 
-  get_temp_setpoint(option) {
+  get_temp_setpoint(option, user_email) {
     const roomkey = option.building.value.toLowerCase() + ':' + 
         option.building.value + '_Rm_' + option.room.value
-    axios.get('/point/setpoint/' + roomkey)
+    axios.get('/point/setpoint/' + roomkey, {
+    	params: {
+		user_email: user_email
+	}
+    })
         .then(res => {
             if(res != null 
                 && res.data != null 
@@ -204,9 +212,9 @@ class SegmentComponent extends Component {
   }
 
   componentDidMount() {
-    const { option } = this.props;
-    this.get_status(option);
-    this.get_temp_setpoint(option);
+    const { option, user_email } = this.props;
+    this.get_status(option, user_email);
+    this.get_temp_setpoint(option, user_email);
   }
 
   render() {

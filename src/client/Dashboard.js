@@ -8,7 +8,7 @@ import Meter from './components/Meter/Meter'
 class Dashboard extends Component {
   render() {
     const {onAddItem, onRemoveItem, changeBuilding, changeCampus, changeCollege,
-      changeRoom, options, updateOptions} = this.props
+      changeRoom, options, updateOptions, user_email} = this.props
     const message = (options.length === 0) ? (
       <Message attached='bottom' warning>
         <Icon name='warning' />
@@ -25,14 +25,14 @@ class Dashboard extends Component {
           <Grid.Column width={12}>
             <SearchPanel updateOptions={updateOptions} mobile={this.props.mobile} options={options}
             onAddItem={onAddItem} onRemoveItem={onRemoveItem} changeBuilding={changeBuilding}
-            changeCampus={changeCampus} changeCollege={changeCollege} changeRoom={changeRoom} />
+            changeCampus={changeCampus} changeCollege={changeCollege} changeRoom={changeRoom} user_email={user_email} />
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
             <Grid.Column>
                 {message}
                 {options.map(option => (
-                  <Meter option={option} mobile={this.props.mobile} />
+                  <Meter option={option} mobile={this.props.mobile} user_email={user_email} />
                 )
                 )}
             </Grid.Column>

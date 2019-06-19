@@ -105,10 +105,14 @@ class SegmentComponent extends Component {
     this.get_room_temperature.bind(this)
   }
 
-  get_energy_usage(option) {
+  get_energy_usage(option, user_email) {
     const roomkey = option.building.value.toLowerCase() + ':' + 
         option.building.value + '_Rm_' + option.room.value
-    axios.get('/point/energy/' + roomkey)
+    axios.get('/point/energy/' + roomkey, {
+    	params: {
+		user_email: user_email
+	}
+    })
         .then(res => {
             if(res != null 
                 && res.data != null 
@@ -123,10 +127,14 @@ class SegmentComponent extends Component {
         })
   }
 
-  get_room_temperature(option) {
+  get_room_temperature(option, user_email) {
     const roomkey = option.building.value.toLowerCase() + ':' + 
         option.building.value + '_Rm_' + option.room.value
-    axios.get('/point/temp/' + roomkey)
+    axios.get('/point/temp/' + roomkey, {
+    	params: {
+		user_email: user_email
+	}
+    })
         .then(res => {
             if(res != null 
                 && res.data != null 
@@ -142,9 +150,9 @@ class SegmentComponent extends Component {
   }
 
   componentDidMount() {
-    const { option } = this.props;
-    this.get_energy_usage(option);
-    this.get_room_temperature(option);
+    const { option, user_email } = this.props;
+    this.get_energy_usage(option, user_email);
+    this.get_room_temperature(option, user_email);
   }
 
   render() {
