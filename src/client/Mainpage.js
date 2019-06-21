@@ -30,7 +30,7 @@ class DesktopContainer extends Component {
     );
     return (
       <Responsive minWidth={1136} >
-        <TopMenu switchAccount={switchAccount} />
+        <TopMenu switchAccount={switchAccount} user_email={user_email} />
         <LeftMenu switchAccount={switchAccount} />
         {main}
       </Responsive>
@@ -244,35 +244,27 @@ class Main extends Component {
       })
   }
 
-  componentDidMount() {
-    if(!localStorage.getItem('options')) {
-      //todo: fetch data
-    }
-    if(!localStorage.getItem('temp')) {
-      //todo: fetch data
-    }
-    if(this.state.user_email !== null) {
-	    console.log("hello")
-	    console.log(this.state.user_email)
-    axios.get('/room', {
-    	params: {
-		user_email: this.state.user_email
-	}
-    })
-      .then(res => {
-          if(res != null) {
-              const resp = res.data;
-              this.setState({ rooms: resp['rooms'] });
-          }
-      })
-   }
-  }
-
   componentWillUpdate(nextProps, nextState) {
       localStorage.setItem('options', JSON.stringify(nextState.options))
       localStorage.setItem('temp', JSON.stringify(nextState.temp))
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if(this.state.user_email !== prevState.user_email) {
+      axios.get('/room', {
+	  params: {
+		  user_email: this.state.user_email.data
+	  }
+      })
+	.then(res => {
+	    if(res != null) {
+		const resp = res.data;
+		this.setState({ rooms: resp['rooms'] });
+	    }
+	})
+    }
+  }
+ 
   render() {
     const {options, account, user_email} = this.state;
     return (

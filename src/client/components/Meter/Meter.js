@@ -6,7 +6,8 @@ import HVACCtl from '../Segment/HVACCtl'
 
 class Meter extends Component {
     state = {
-        openMeter: true
+        openMeter: true,
+	user_email: null
     }
 
     componentWillMount() {
@@ -25,8 +26,24 @@ class Meter extends Component {
         localStorage.setItem('openMeter', JSON.stringify(nextState.openMeter))
     }
 
+    static getDerivedStateFromProps(props, state) {
+      const { user_email } = props;
+      if(user_email != null) {
+	if(user_email !== state.user_email) {
+	  return {
+		  user_email: user_email
+	  };
+	}
+	else {
+	  return null;
+	}
+      }
+      return null;
+    }
+
     render() {
-        const option = this.props.option
+        const {option} = this.props
+	const {user_email} = this.state
         const sections = [
             { key: option.college.value, content: option.college.value, link: false },
             { key: option.campus.value, content: option.campus.value, link: false },
@@ -40,10 +57,10 @@ class Meter extends Component {
                 <Grid container={this.props.mobile} stackable={this.props.mobile}>
                     <Grid.Row columns={2}>
                         <Grid.Column width={8}>
-                            <EnvInfo title={"Environment Information"} option={option} mobile={this.props.mobile} user_email={this.props.user_email} />
+                            <EnvInfo title={"Environment Information"} option={option} mobile={this.props.mobile} user_email={user_email} />
                         </Grid.Column>
                         <Grid.Column width={8}>
-                            <HVACCtl title={"HVAC Control"} option={option} mobile={this.props.mobile} user_email={this.props.user_email} />
+                            <HVACCtl title={"HVAC Control"} option={option} mobile={this.props.mobile} user_email={user_email} />
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>

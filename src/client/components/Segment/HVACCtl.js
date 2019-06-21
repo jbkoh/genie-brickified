@@ -126,15 +126,15 @@ class SegmentComponent extends Component {
   }
 
   toggleStatus = () => {
-    const { option } = this.props;
+    const { option, user_email } = this.props;
     const status = (this.state.status === 3) ? 1 : 3
     this.setState({loading: true})
-    this.set_status(option, status.toString(), status)
+    this.set_status(option, status.toString(), status, user_email)
   }
 
   handleChangeTemp = (temperature) => {
-      const { option } = this.props;
-      this.set_temp_setpoint(option, temperature)
+      const { option, user_email } = this.props;
+      this.set_temp_setpoint(option, temperature, user_email)
       this.setState({
         temperature: temperature
       })
@@ -145,7 +145,7 @@ class SegmentComponent extends Component {
         option.building.value + '_Rm_' + option.room.value
     axios.get('/point/status/' + roomkey, {
     	params: {
-		user_email: user_email
+		user_email: user_email.data
 	}
     })
         .then(res => {
@@ -167,7 +167,7 @@ class SegmentComponent extends Component {
         option.building.value + '_Rm_' + option.room.value
     axios.get('/point/setpoint/' + roomkey, {
     	params: {
-		user_email: user_email
+		user_email: user_email.data
 	}
     })
         .then(res => {
@@ -184,10 +184,14 @@ class SegmentComponent extends Component {
         })
   }
 
-  set_status(option, status, numStatus) {
+  set_status(option, status, numStatus, user_email) {
     const roomkey = option.building.value.toLowerCase() + ':' + 
         option.building.value + '_Rm_' + option.room.value
-    axios.post('/point/status/' + roomkey, { value: status })
+    axios.post('/point/status/' + roomkey, { value: status }, {
+	    params: {
+	    	user_email: user_email.data
+	    }
+    })
         .then(res => {
             this.setState({
               status: numStatus,
@@ -199,10 +203,14 @@ class SegmentComponent extends Component {
         });
   }
 
-  set_temp_setpoint(option, temp) {
+  set_temp_setpoint(option, temp, user_email) {
     const roomkey = option.building.value.toLowerCase() + ':' + 
         option.building.value + '_Rm_' + option.room.value
-    axios.post('/point/setpoint/' + roomkey, { value: temp })
+    axios.post('/point/setpoint/' + roomkey, { value: temp }, {
+    	params: {
+		user_email: user_email.data
+	}
+    })
         .then(function (response) {
             console.log(response);
         })
@@ -211,10 +219,36 @@ class SegmentComponent extends Component {
         });
   }
 
-  componentDidMount() {
+  static getDerivedStateFromProps(props, state) {
+    const { user_email } = props;
+    if(user_email != null) {
+      if(user_email !== state.user_email) {
+        return {
+		user_email: user_email
+	};
+      }
+      else {
+      	return null;
+      }
+    }
+    return null;
+  }
+
+  componentDidMount(prevProps, prevState) {
     const { option, user_email } = this.props;
-    this.get_status(option, user_email);
-    this.get_temp_setpoint(option, user_email);
+	  console.log(option)
+    if(user_email != null) {
+      localStorage.setItem('user_id', JSON.stringify(user_email))
+      if(typeof prevProps === 'undefined' || user_email !== prevProps.user_email) {
+	this.get_status(option, user_email);
+	this.get_temp_setpoint(option, user_email);
+      }
+    }
+    else if(localStorage.getItem('user_id')) {
+	let user_id = JSON.parse(localStorage.getItem('user_id'))
+	this.get_status(option, user_id);
+	this.get_temp_setpoint(option, user_id);
+    }
   }
 
   render() {

@@ -10,26 +10,37 @@ class TopMenu extends Component {
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name });
 
-  componentDidMount() {
-	  const {user_email} = this.props
-	  if(user_email !== null) { 
-    axios.get('/user', {
-    	params: {
-		user_email: user_email
-	}
-    })
-        .then(res => {
-            if(res != null 
-                && res.data != null 
-                && res.data['value'] != null) {
-                const resp = res.data;
-                this.setState({ user: resp['value'].name });
-            }
-            else {
-                this.setState({ user: 'User' });
-            }
-        })
-	  } 
+  static getDerivedStateFromProps(props, state) {
+    const {user_email} = props
+    if(user_email != null) {
+      if(user_email !== state.user_email) { 
+	axios.get('/user', {
+	    params: {
+		    user_email: user_email.data
+	    }
+	})
+	    .then(res => {
+		if(res != null 
+		    && res.data != null
+		    && res.data['value'] != null) {
+		    return { 
+		      user: res.data['value'],
+		      user_email: user_email,
+		    };
+		}
+		else {
+		    return { 
+		      user: 'User',
+		      user_email: user_email,
+		    };
+		}
+	    })
+      }
+      else {
+      	return null;
+      }
+    } 
+    return null;
   }
 
   render() {
@@ -44,7 +55,6 @@ class TopMenu extends Component {
         <Icon name="user" size="large" style={iconStyle} /> {user}
       </span>
     );
-
     return (
       <Menu pointing secondary className="top-menu">
         <Menu.Menu postion="left" className="menu-logo">

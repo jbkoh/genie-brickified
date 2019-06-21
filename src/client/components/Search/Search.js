@@ -23,52 +23,62 @@ class Dashboard extends Component {
         return {key: option, value: option, text: option}
     }
 
-    componentDidMount() {
-      if(!localStorage.getItem('openSearch')) {
-        //todo: fetch data
-      }
-      const {user_email} = this.props
-      if(user_email !== null) {
-      axios.get('/room', {
-      	params: {
-		user_email: user_email
+    static getDerivedStateFromProps(props, state) {
+      const { user_email } = props;
+      if(user_email != null) {
+	if(user_email !== state.user_email) {
+	  return {
+		  user_email: user_email
+	  };
 	}
-      })
-        .then(res => {
-            if(res != null) {
-                const rooms = res.data;
-                this.setState({ rooms });
-                // eslint-disable-next-line array-callback-return
-                rooms['rooms'].map((room) => {
-                    const collegeOption = {key: room.college, value: room.college, text: room.college}
-                    const campusOption = {key: room.campus, value: room.campus, text: room.campus}
-                    const buildingOption = {key: room.building, value: room.building, text: room.building}
-                    const roomOption = {key: room.room, value: room.room, text: room.room}
-                    this.setState(
-                        state => {
-                            if(!state.collegeOptions.includes(collegeOption))
-                                state.collegeOptions.push(collegeOption)
-                            if(!state.campusOptions.includes(campusOption))
-                                state.campusOptions.push(campusOption)
-                            if(!state.buildingOptions.includes(buildingOption))
-                                state.buildingOptions.push(buildingOption)
-                            if(!state.roomOptions.includes(roomOption))
-                                state.roomOptions.push(roomOption)
-                            const collegeOptions = state.collegeOptions
-                            const campusOptions = state.campusOptions
-                            const buildingOptions = state.buildingOptions
-                            const roomOptions = state.roomOptions
-                            return {
-                                collegeOptions,
-                                campusOptions,
-                                buildingOptions,
-                                roomOptions
-                            }
-                        }
-                    )
-                })
-            }
-        })
+	else {
+	  return null;
+	}
+      }
+      return null;
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+      if(this.props.user_email !== prevProps.user_email) {
+	axios.get('/room', {
+	  params: {
+		  user_email: this.props.user_email.data
+	  }
+	})
+	  .then(res => {
+	      if(res != null) {
+		  const rooms = res.data;
+		  this.setState({ rooms });
+		  rooms['rooms'].map((room) => {
+		      const collegeOption = {key: room.college, value: room.college, text: room.college}
+		      const campusOption = {key: room.campus, value: room.campus, text: room.campus}
+		      const buildingOption = {key: room.building, value: room.building, text: room.building}
+		      const roomOption = {key: room.room, value: room.room, text: room.room}
+		      this.setState(
+			  state => {
+			      if(!state.collegeOptions.includes(collegeOption))
+				  state.collegeOptions.push(collegeOption)
+			      if(!state.campusOptions.includes(campusOption))
+				  state.campusOptions.push(campusOption)
+			      if(!state.buildingOptions.includes(buildingOption))
+				  state.buildingOptions.push(buildingOption)
+			      if(!state.roomOptions.includes(roomOption))
+				  state.roomOptions.push(roomOption)
+			      const collegeOptions = state.collegeOptions
+			      const campusOptions = state.campusOptions
+			      const buildingOptions = state.buildingOptions
+			      const roomOptions = state.roomOptions
+			      return {
+				  collegeOptions,
+				  campusOptions,
+				  buildingOptions,
+				  roomOptions
+			      }
+			  }
+		      )
+		  })
+	      }
+	  })
       }
     }
 
@@ -79,7 +89,7 @@ class Dashboard extends Component {
     render() {
         const {openSearch, collegeOptions, campusOptions, buildingOptions, roomOptions} = this.state
         const {onAddItem, onRemoveItem, changeBuilding, changeCampus, changeCollege,
-          changeRoom, options, user_email} = this.props
+          changeRoom, options} = this.props
         const message = openSearch ? 'Hide Room List' : 'Show Room List'
         const table = (openSearch) ? (
             options.map((option, index) => (

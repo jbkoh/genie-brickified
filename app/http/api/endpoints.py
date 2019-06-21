@@ -40,8 +40,10 @@ def get_token(user_access_token):
         'client_id': cid,
         'client_secret': csec,
     }
+    print(user_access_token)
     url = API_URL + '/auth/get_token'
     resp = requests.post(url, json=body)
+    print(resp.json())
     return resp.json()['token']
 
 @app.route('/log')

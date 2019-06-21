@@ -110,7 +110,7 @@ class SegmentComponent extends Component {
         option.building.value + '_Rm_' + option.room.value
     axios.get('/point/energy/' + roomkey, {
     	params: {
-		user_email: user_email
+		user_email: user_email.data
 	}
     })
         .then(res => {
@@ -118,10 +118,13 @@ class SegmentComponent extends Component {
                 && res.data != null 
                 && res.data['value'] != null) {
                 const resp = res.data;
+        	localStorage.setItem('energy', JSON.stringify(resp['value']))
+        	localStorage.setItem('energy_error', JSON.stringify(false))
                 this.setState({ energy_value: resp['value'],
                                 energy_error: false });
             }
             else {
+        	localStorage.setItem('energy_error', JSON.stringify(true))
                 this.setState({ energy_error: true });
             }
         })
@@ -132,7 +135,7 @@ class SegmentComponent extends Component {
         option.building.value + '_Rm_' + option.room.value
     axios.get('/point/temp/' + roomkey, {
     	params: {
-		user_email: user_email
+		user_email: user_email.data
 	}
     })
         .then(res => {
@@ -140,25 +143,52 @@ class SegmentComponent extends Component {
                 && res.data != null 
                 && res.data['value'] != null) {
                 const resp = res.data;
+        	localStorage.setItem('temperature', JSON.stringify(resp['value']))
+        	localStorage.setItem('temp_error', JSON.stringify(false))
                 this.setState({ temperature_value: resp['value'],
                                 temperature_error: false });
             }
             else {
+        	localStorage.setItem('temp_error', JSON.stringify(true))
                 this.setState({ temperature_error: true });
             }
         })
   }
 
-  componentDidMount() {
+  static getDerivedStateFromProps(props, state) {
+    const { user_email } = props;
+    if(user_email != null) {
+      if(user_email !== state.user_email) {
+        return {
+                user_email: user_email
+        };
+      }
+      else {
+        return null;
+      }
+    }
+    return null;
+  }
+
+  componentDidMount(prevProps, prevState) {
     const { option, user_email } = this.props;
-    this.get_energy_usage(option, user_email);
-    this.get_room_temperature(option, user_email);
+    if(user_email != null) {
+      if(typeof prevProps === 'undefined' || user_email !== prevProps.user_email) {
+	this.get_energy_usage(option, user_email);
+	this.get_room_temperature(option, user_email);
+      }
+    }
+    else if(localStorage.getItem('energy_error')) {
+      this.setState({
+	  energy_error: JSON.parse(localStorage.getItem('energy_error')),
+	  temperature_error: JSON.parse(localStorage.getItem('temp_error')),
+	  temperature_value: JSON.parse(localStorage.getItem('temperature')),
+	  energy_value: JSON.parse(localStorage.getItem('energy')),
+      })
+    }
   }
 
   render() {
-    // const { option } = this.props;
-    // this.get_energy_usage(option);
-    // this.get_room_temperature(option);
     const { energy_value, temperature_value, energy_error, temperature_error } = this.state;
     const energy_progress = energy_value / 10.0 * 100.0;
     const temperature_progress = (temperature_value - 60.0) / 20.0 * 100.0;
