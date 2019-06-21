@@ -238,7 +238,6 @@ class SegmentComponent extends Component {
     const { option, user_email } = this.props;
 	  console.log(option)
     if(user_email != null) {
-      localStorage.setItem('user_id', JSON.stringify(user_email))
       if(typeof prevProps === 'undefined' || user_email !== prevProps.user_email) {
 	this.get_status(option, user_email);
 	this.get_temp_setpoint(option, user_email);

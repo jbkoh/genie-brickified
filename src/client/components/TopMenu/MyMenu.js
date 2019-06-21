@@ -1,10 +1,27 @@
 import React, { Component } from 'react';
 import { Dropdown } from 'semantic-ui-react';
+import { Redirect } from 'react-router-dom';
 
 class MyPage extends Component {
+  state = {
+    redir: false
+  };
+  
   switchPage = (e, {value}) => {
-    if(value === 'profile')
+    if(value === 'profile') {
       this.props.switchAccount(true)
+    }
+    else if(value === 'sign-out') {
+      localStorage.clear();
+      sessionStorage.clear();
+      this.setState({ redir: true });
+    }
+  }
+
+  renderRedir = () => {
+    if (this.state.redir) {
+      return <Redirect to='/' />
+    }
   }
 
   render() {
@@ -23,7 +40,12 @@ class MyPage extends Component {
       { key: 'sign-out', value: 'sign-out', text: 'Sign Out' }
     ];
 
-    return <Dropdown trigger={this.props.trigger} options={options} onChange={this.switchPage} />;
+    return(
+	<div>
+	  {this.renderRedir()}
+          <Dropdown trigger={this.props.trigger} options={options} onChange={this.switchPage} />
+	</div>
+    );
   }
 }
 

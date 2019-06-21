@@ -144,6 +144,7 @@ class Main extends Component {
 		}
 	})
           .then((res) => {
+            localStorage.setItem('user_id', JSON.stringify(res))
 	    this.setState({
 		user_email: res,
 	    	redirect: true

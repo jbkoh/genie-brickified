@@ -118,13 +118,10 @@ class SegmentComponent extends Component {
                 && res.data != null 
                 && res.data['value'] != null) {
                 const resp = res.data;
-        	localStorage.setItem('energy', JSON.stringify(resp['value']))
-        	localStorage.setItem('energy_error', JSON.stringify(false))
                 this.setState({ energy_value: resp['value'],
                                 energy_error: false });
             }
             else {
-        	localStorage.setItem('energy_error', JSON.stringify(true))
                 this.setState({ energy_error: true });
             }
         })
@@ -143,13 +140,10 @@ class SegmentComponent extends Component {
                 && res.data != null 
                 && res.data['value'] != null) {
                 const resp = res.data;
-        	localStorage.setItem('temperature', JSON.stringify(resp['value']))
-        	localStorage.setItem('temp_error', JSON.stringify(false))
                 this.setState({ temperature_value: resp['value'],
                                 temperature_error: false });
             }
             else {
-        	localStorage.setItem('temp_error', JSON.stringify(true))
                 this.setState({ temperature_error: true });
             }
         })
@@ -178,13 +172,10 @@ class SegmentComponent extends Component {
 	this.get_room_temperature(option, user_email);
       }
     }
-    else if(localStorage.getItem('energy_error')) {
-      this.setState({
-	  energy_error: JSON.parse(localStorage.getItem('energy_error')),
-	  temperature_error: JSON.parse(localStorage.getItem('temp_error')),
-	  temperature_value: JSON.parse(localStorage.getItem('temperature')),
-	  energy_value: JSON.parse(localStorage.getItem('energy')),
-      })
+    else if(localStorage.getItem('user_id')) {
+        let user_id = JSON.parse(localStorage.getItem('user_id'))
+	this.get_energy_usage(option, user_id);
+	this.get_room_temperature(option, user_id);
     }
   }
 
