@@ -129,6 +129,7 @@ class Main extends Component {
     }
 
     loginRedirect = () => {
+	    console.log(window.location.search)
       if (window.location.search !== "") {
         this.sessionSet("user_token", window.location.search.slice(19))
       }

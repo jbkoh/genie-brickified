@@ -1,8 +1,47 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Grid, Icon, Header, Segment, Divider, Statistic, Button } from 'semantic-ui-react';
+import { Grid, Icon, Header, Segment, Divider, Statistic, Button, Message } from 'semantic-ui-react';
 import './Segment.css';
 import Slider from 'react-input-slider';
+
+const WarningObject = ({icon, color, title, mobile}) => (
+    <Segment  raised style={{minHeight: "204px"}} color="red">
+        <Grid>
+            <Grid.Row>
+                <Grid.Column width={6} style={{
+                    textAlign: "center",
+                    marginTop: 0
+                }} >
+                    <Grid.Row style={{
+                        marginTop: 40,
+                    }} >
+                        <Icon name={icon} size={mobile ? 'huge' : 'huge'} style={{
+                            color: color
+                        }} />
+                    </Grid.Row>
+                </Grid.Column>
+                <Grid.Column width={10} style={{
+                    textAlign: "left",
+                    marginTop: 0
+                }} >
+                    <Grid.Row style={{
+                        marginTop: 40,
+                    }} >
+                        <Header className="segtitle">{title}</Header>
+                    </Grid.Row>
+                    <Grid.Row style={{
+                        marginTop: 15,
+                    }} >
+                        <Message negative>
+                            <Icon name='warning' />
+                            No Data Found
+                        </Message>
+                    </Grid.Row>
+                </Grid.Column>
+            </Grid.Row>
+        </Grid>
+    </Segment>
+);
 
 const SegmentObject = ({icon, color, title, value, label, handleChangeTemp, mobile}) => (
     <Segment className={"glowfloat"} raised style={{minHeight: "204px"}} color="violet">
@@ -149,6 +188,7 @@ class SegmentComponent extends Component {
 	}
     })
         .then(res => {
+		console.log(res)
             if(res != null 
                 && res.data != null 
                 && res.data['value'] != null) {
@@ -236,7 +276,6 @@ class SegmentComponent extends Component {
 
   componentDidMount(prevProps, prevState) {
     const { option, user_email } = this.props;
-	  console.log(option)
     if(user_email != null) {
       if(typeof prevProps === 'undefined' || user_email !== prevProps.user_email) {
 	this.get_status(option, user_email);
@@ -251,7 +290,24 @@ class SegmentComponent extends Component {
   }
 
   render() {
-    const { status, temperature, loading } = this.state;
+    const { status, temperature, loading, status_error, setpoint_error } = this.state;
+    const StatusPanel = (status_error) ? (
+        <WarningObject icon={"power off"} color={"rgb(143, 201, 251)"}
+        title={"Status"} mobile={this.props.mobile} />
+    ) : (   
+        <SwitchObject icon={"power off"} color={"rgb(143, 201, 251)"} 
+	    title={"Status"} value={(status === 3) ? "ON" : "OFF"}
+	    toggleStatus={this.toggleStatus} mobile={this.props.mobile} loading={loading} />
+    );              
+    const SetpointPanel  = (setpoint_error) ? (
+        <WarningObject icon={"thermometer quarter"} color={"rgb(248, 200, 46)"}
+        title={"Temperature"} mobile={this.props.mobile} />
+    ) : (                   
+    	<SegmentObject icon={"thermometer quarter"} color={"rgb(248, 200, 46)"} 
+	    title={"Temperature"} value={temperature} label={"°F"}
+	    handleChangeTemp={this.handleChangeTemp} mobile={this.props.mobile} />
+
+    );   
     return (
         <Grid container={this.props.mobile} stackable={this.props.mobile}>
             <Grid.Row>
@@ -265,15 +321,11 @@ class SegmentComponent extends Component {
             </Grid.Row>
             <Grid.Row>
                 <Grid.Column width={8} >
-                    <SwitchObject icon={"power off"} color={"rgb(143, 201, 251)"} 
-                        title={"Status"} value={(status === 3) ? "ON" : "OFF"}
-                        toggleStatus={this.toggleStatus} mobile={this.props.mobile} loading={loading} />
+	    		{StatusPanel}
                 </Grid.Column>
                 <Grid.Column width={8} >
-                    <SegmentObject icon={"thermometer quarter"} color={"rgb(248, 200, 46)"} 
-                        title={"Temperature"} value={temperature} label={"°F"}
-                        handleChangeTemp={this.handleChangeTemp} mobile={this.props.mobile} />
-                </Grid.Column>
+	    		{SetpointPanel}
+               </Grid.Column>
             </Grid.Row>
         </Grid>
     );

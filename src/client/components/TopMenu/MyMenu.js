@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Dropdown } from 'semantic-ui-react';
 import { Redirect } from 'react-router-dom';
+import axios from 'axios';
 
 class MyPage extends Component {
   state = {
@@ -14,7 +15,10 @@ class MyPage extends Component {
     else if(value === 'sign-out') {
       localStorage.clear();
       sessionStorage.clear();
-      this.setState({ redir: true });
+      axios.get('/logout')
+        .then(() => {
+		this.setState({ redir: true })
+	})
     }
   }
 
