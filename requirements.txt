@@ -4,3 +4,4 @@ pyjwt==1.7.1
 flask_cors==3.0.7
 arrow
 pyyaml
+Flask-Dance

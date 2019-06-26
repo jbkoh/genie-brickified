@@ -20,6 +20,7 @@ APP = 'genie'
 
 REDIRECT_URI = '/oauth2callback'
 AUTH_URL = 'https://bd-testbed.ucsd.edu:{0}/api/v1/auth/login/{1}'.format(PORT, APP)
+INDEX_URL = 'https://bd-testbed.ucsd.edu:11001'
 
 API_URL = 'https://bd-testbed.ucsd.edu:{0}/api/v1'.format(PORT)
 
@@ -50,12 +51,18 @@ def login():
 
 @app.route('/logout')
 def logout():
-    session.pop('google_token', None)
+    resp = requests.post('https://accounts.google.com/o/oauth2/revoke',
+    params={'token': session['google_token']},
+    headers = {'content-type': 'application/x-www-form-urlencoded'})
+    if resp.ok:
+        session.pop('google_token', None)
+    return redirect(INDEX_URL)
 
 @app.route('/redirected')
 def redirected():
     # get token
     access_token = request.args['user_access_token']
+    session['google_token'] = access_token
     jwt_token = get_token(access_token)
     url = API_URL + '/auth/get_userid'
     authorization = 'Bearer {0}'.format(jwt_token)

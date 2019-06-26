@@ -23,6 +23,7 @@ class MyPage extends Component {
   }
 
   renderRedir = () => {
+	  console.log(sessionStorage)
     if (this.state.redir) {
       return <Redirect to='/' />
     }
