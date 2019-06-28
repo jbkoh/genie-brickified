@@ -24,9 +24,6 @@ INDEX_URL = 'https://bd-testbed.ucsd.edu:11001'
 
 API_URL = 'https://bd-testbed.ucsd.edu:{0}/api/v1'.format(PORT)
 
-with open('jwtRS256.key.pub', 'r') as fp:
-    jwt_public_key = fp.read()
-
 cid = 'lvAdQjr110DwFaq'
 csec = 'q4feLWYjbzDk7QvPkQHmKjkF4'
 
@@ -60,10 +57,18 @@ def logout():
 
 @app.route('/redirected')
 def redirected():
-    # get token
     access_token = request.args['user_access_token']
     session['google_token'] = access_token
     jwt_token = get_token(access_token)
+    url = API_URL + '/auth/get_userid'
+    authorization = 'Bearer {0}'.format(jwt_token)
+    res = requests.get(url, headers={'Authorization': authorization})
+    user_email = res.json()
+    return user_email
+
+@app.route("/userid")
+def get_userid():
+    jwt_token = request.args['user_token']
     url = API_URL + '/auth/get_userid'
     authorization = 'Bearer {0}'.format(jwt_token)
     res = requests.get(url, headers={'Authorization': authorization})
@@ -105,9 +110,11 @@ def get_all_rooms():
 def get_temp_setpoint(room):
     user_email = request.args['user_email']
     uuid = get_temperature_setpoint(room, user_email)
-    if uuid == None:
+    if (uuid == None or session['google_token'] == None):
         return json_response({'value': None})
-    value = query_data(uuid)
+    access_token = session['google_token']
+    jwt_token = get_token(access_token)
+    value = query_data(uuid, jwt_token)
     return json_response({'value': value})
 
 
@@ -115,10 +122,12 @@ def get_temp_setpoint(room):
 def set_temp_setpoint(room):
     user_email = request.args['user_email']
     uuid = get_temperature_setpoint(room, user_email)
-    if uuid == None:
+    if (uuid == None or session['google_token'] == None):
         return json_response({'value': None})
     req_data = request.get_json()
-    query_actuation(uuid, req_data['value'])
+    access_token = session['google_token']
+    jwt_token = get_token(access_token)
+    query_actuation(uuid, req_data['value'], jwt_token)
     return json_response({'value': req_data['value']})
 
 
@@ -126,9 +135,11 @@ def set_temp_setpoint(room):
 def get_room_temperature(room):
     user_email = request.args['user_email']
     uuid = get_zone_temperature_sensor(room, user_email)
-    if uuid == None:
+    if (uuid == None or session['google_token'] == None):
         return json_response({'value': None})
-    value = query_data(uuid)
+    access_token = session['google_token']
+    jwt_token = get_token(access_token)
+    value = query_data(uuid, jwt_token)
     return json_response({'value': value})
 
 
@@ -136,9 +147,11 @@ def get_room_temperature(room):
 def get_energy_usage(room):
     user_email = request.args['user_email']
     uuid = get_thermal_power_sensor(room, user_email)
-    if uuid == None:
+    if (uuid == None or session['google_token'] == None):
         return json_response({'value': None})
-    value = query_data(uuid)
+    access_token = session['google_token']
+    jwt_token = get_token(access_token)
+    value = query_data(uuid, jwt_token)
     return json_response({'value': value})
 
 
@@ -146,9 +159,11 @@ def get_energy_usage(room):
 def get_status(room):
     user_email = request.args['user_email']
     uuid = get_occupancy_command(room, user_email)
-    if uuid == None:
+    if (uuid == None or session['google_token'] == None):
         return json_response({'value': None})
-    value = query_data(uuid)
+    access_token = session['google_token']
+    jwt_token = get_token(access_token)
+    value = query_data(uuid, jwt_token)
     return json_response({'value': value})
 
 
@@ -156,18 +171,22 @@ def get_status(room):
 def set_status(room):
     user_email = request.args['user_email']
     uuid = get_occupancy_command(room, user_email)
-    if uuid == None:
+    if (uuid == None or session['google_token'] == None):
         return json_response({'value': None})
     req_data = request.get_json()
+    access_token = session['google_token']
+    jwt_token = get_token(access_token)
     # 3 means on, 1 means off
-    resp = query_actuation(uuid, req_data['value'])
+    resp = query_actuation(uuid, req_data['value'], jwt_token)
     return json_response({'value': req_data['value']})
 
 
 @app.route("/user", methods=["GET"])
 def get_current_user():
     user_email = request.args['user_email']
-    user = get_user(user_email)
+    access_token = session['google_token']
+    jwt_token = get_token(access_token)
+    user = get_user(user_email, jwt_token)
     return json_response({'value': user})
 
 

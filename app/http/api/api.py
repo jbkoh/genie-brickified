@@ -31,10 +31,11 @@ with open('genie_master_token', 'r') as fp:
 #with open('VEnergy_master_token', 'r') as fp:
     jwt_token = fp.read()
 
-headers = {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer ' + jwt_token,
-}
+def getHeader(jwt_token):
+  return {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + jwt_token,
+  }
 
 def json_response(payload, status=200):
  return (json.dumps(payload), status, {'content-type': 'application/json'})
@@ -51,7 +52,7 @@ def query_sparql(qstr):
         return resp.json()
 
 
-def query_data(uuid):
+def query_data(uuid, jwt_token):
     if(production):
         start_time = (datetime.utcnow() - timedelta(minutes=30)).strftime('%s')
         end_time = datetime.utcnow().strftime('%s')
@@ -63,10 +64,13 @@ def query_data(uuid):
         'start_time': start_time,
         'end_time': end_time,
     }
+    print(params)
+    print(ts_url + '/' + uuid)
     resp = requests.get(ts_url + '/' + uuid,
                         params=params,
-                        headers=headers,
+                        headers=getHeader(jwt_token),
                         )
+    print(resp.json())
     if resp.status_code != 200:
         return None
     data = resp.json()["data"]
@@ -77,13 +81,13 @@ def query_data(uuid):
         return None
 
 
-def query_actuation(uuid, value):
+def query_actuation(uuid, value, jwt_token):
     body = { 'value': value }
-    resp = requests.post(actuation_url + '/' + uuid, json=body, headers=headers)
+    resp = requests.post(actuation_url + '/' + uuid, json=body, headers=getHeader(jwt_token))
 
 
-def query_entity_tagset(uuid):
-    resp = requests.get(entity_url + '/' + uuid, headers=headers)    
+def query_entity_tagset(uuid, jwt_token):
+    resp = requests.get(entity_url + '/' + uuid, headers=getHeader(jwt_token)) 
     if resp.status_code != 200:
         return None    
     type = resp.json()["type"]
@@ -113,8 +117,8 @@ def iterate_extract(list, prefix_tagset):
     return res
 
 
-def get_user(email):
-    res = requests.get(user_url + '/' + email, headers=headers)
+def get_user(email, jwt_token):
+    res = requests.get(user_url + '/' + email, headers=getHeader(jwt_token))
     if res.status_code == 200:
         return res.json()
     else:
