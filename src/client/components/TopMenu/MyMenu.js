@@ -15,7 +15,7 @@ class MyPage extends Component {
     else if(value === 'sign-out') {
       localStorage.clear();
       sessionStorage.clear();
-      axios.get('/logout')
+      axios.get('/api/logout')
         .then(() => {
 		this.setState({ redir: true })
 	})
@@ -23,7 +23,6 @@ class MyPage extends Component {
   }
 
   renderRedir = () => {
-	  console.log(sessionStorage)
     if (this.state.redir) {
       return <Redirect to='/' />
     }

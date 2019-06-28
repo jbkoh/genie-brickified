@@ -182,13 +182,12 @@ class SegmentComponent extends Component {
   get_status(option, user_email) {
     const roomkey = option.building.value.toLowerCase() + ':' + 
         option.building.value + '_Rm_' + option.room.value
-    axios.get('/point/status/' + roomkey, {
+    axios.get('/api/point/status/' + roomkey, {
     	params: {
 		user_email: user_email.data
 	}
     })
         .then(res => {
-		console.log(res)
             if(res != null 
                 && res.data != null 
                 && res.data['value'] != null) {
@@ -205,7 +204,7 @@ class SegmentComponent extends Component {
   get_temp_setpoint(option, user_email) {
     const roomkey = option.building.value.toLowerCase() + ':' + 
         option.building.value + '_Rm_' + option.room.value
-    axios.get('/point/setpoint/' + roomkey, {
+    axios.get('/api/point/setpoint/' + roomkey, {
     	params: {
 		user_email: user_email.data
 	}
@@ -227,7 +226,7 @@ class SegmentComponent extends Component {
   set_status(option, status, numStatus, user_email) {
     const roomkey = option.building.value.toLowerCase() + ':' + 
         option.building.value + '_Rm_' + option.room.value
-    axios.post('/point/status/' + roomkey, { value: status }, {
+    axios.post('/api/point/status/' + roomkey, { value: status }, {
 	    params: {
 	    	user_email: user_email.data
 	    }
@@ -246,7 +245,7 @@ class SegmentComponent extends Component {
   set_temp_setpoint(option, temp, user_email) {
     const roomkey = option.building.value.toLowerCase() + ':' + 
         option.building.value + '_Rm_' + option.room.value
-    axios.post('/point/setpoint/' + roomkey, { value: temp }, {
+    axios.post('/api/point/setpoint/' + roomkey, { value: temp }, {
     	params: {
 		user_email: user_email.data
 	}

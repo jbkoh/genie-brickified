@@ -129,7 +129,6 @@ class Main extends Component {
     }
 
     loginRedirect = () => {
-	    console.log(window.location.search)
       if (window.location.search !== "") {
         this.sessionSet("user_token", window.location.search.slice(19))
       }
@@ -139,7 +138,7 @@ class Main extends Component {
         return <Redirect to='/' />
       }
       else if(!this.state.redirect){
-	axios.get('/redirected', {
+	axios.get('/api/redirected', {
 		params: {
 			user_access_token: user_token
 		}
@@ -253,7 +252,7 @@ class Main extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if(this.state.user_email !== prevState.user_email) {
-      axios.get('/room', {
+      axios.get('/api/room', {
 	  params: {
 		  user_email: this.state.user_email.data
 	  }

@@ -42,11 +42,11 @@ def get_token(user_access_token):
     resp = requests.post(url, json=body)
     return resp.json()['token']
 
-@app.route('/log')
+@app.route('/api/log')
 def login():
     return redirect(AUTH_URL)
 
-@app.route('/logout')
+@app.route('/api/logout')
 def logout():
     resp = requests.post('https://accounts.google.com/o/oauth2/revoke',
     params={'token': session['google_token']},
@@ -55,7 +55,7 @@ def logout():
         session.pop('google_token', None)
     return redirect(INDEX_URL)
 
-@app.route('/redirected')
+@app.route('/api/redirected')
 def redirected():
     access_token = request.args['user_access_token']
     session['google_token'] = access_token
@@ -66,7 +66,7 @@ def redirected():
     user_email = res.json()
     return user_email
 
-@app.route("/userid")
+@app.route("/api/userid")
 def get_userid():
     jwt_token = request.args['user_token']
     url = API_URL + '/auth/get_userid'
@@ -89,7 +89,7 @@ def authorized():
 
 
 
-@app.route("/room", methods=["GET"])
+@app.route("/api/room", methods=["GET"])
 def get_all_rooms():
     user_email = request.args['user_email']
     q = """
@@ -106,7 +106,7 @@ def get_all_rooms():
     return json_response({'rooms': rooms})
 
 
-@app.route("/point/setpoint/<room>", methods=["GET"])
+@app.route("/api/point/setpoint/<room>", methods=["GET"])
 def get_temp_setpoint(room):
     user_email = request.args['user_email']
     uuid = get_temperature_setpoint(room, user_email)
@@ -118,7 +118,7 @@ def get_temp_setpoint(room):
     return json_response({'value': value})
 
 
-@app.route("/point/setpoint/<room>", methods=["POST"])
+@app.route("/api/point/setpoint/<room>", methods=["POST"])
 def set_temp_setpoint(room):
     user_email = request.args['user_email']
     uuid = get_temperature_setpoint(room, user_email)
@@ -131,7 +131,7 @@ def set_temp_setpoint(room):
     return json_response({'value': req_data['value']})
 
 
-@app.route("/point/temp/<room>", methods=["GET"])
+@app.route("/api/point/temp/<room>", methods=["GET"])
 def get_room_temperature(room):
     user_email = request.args['user_email']
     uuid = get_zone_temperature_sensor(room, user_email)
@@ -143,7 +143,7 @@ def get_room_temperature(room):
     return json_response({'value': value})
 
 
-@app.route("/point/energy/<room>", methods=["GET"])
+@app.route("/api/point/energy/<room>", methods=["GET"])
 def get_energy_usage(room):
     user_email = request.args['user_email']
     uuid = get_thermal_power_sensor(room, user_email)
@@ -155,7 +155,7 @@ def get_energy_usage(room):
     return json_response({'value': value})
 
 
-@app.route("/point/status/<room>", methods=["GET"])
+@app.route("/api/point/status/<room>", methods=["GET"])
 def get_status(room):
     user_email = request.args['user_email']
     uuid = get_occupancy_command(room, user_email)
@@ -167,7 +167,7 @@ def get_status(room):
     return json_response({'value': value})
 
 
-@app.route("/point/status/<room>", methods=["POST"])
+@app.route("/api/point/status/<room>", methods=["POST"])
 def set_status(room):
     user_email = request.args['user_email']
     uuid = get_occupancy_command(room, user_email)
@@ -181,7 +181,7 @@ def set_status(room):
     return json_response({'value': req_data['value']})
 
 
-@app.route("/user", methods=["GET"])
+@app.route("/api/user", methods=["GET"])
 def get_current_user():
     user_email = request.args['user_email']
     access_token = session['google_token']

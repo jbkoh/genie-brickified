@@ -108,7 +108,7 @@ class SegmentComponent extends Component {
   get_energy_usage(option, user_email) {
     const roomkey = option.building.value.toLowerCase() + ':' + 
         option.building.value + '_Rm_' + option.room.value
-    axios.get('/point/energy/' + roomkey, {
+    axios.get('/api/point/energy/' + roomkey, {
     	params: {
 		user_email: user_email.data
 	}
@@ -130,7 +130,7 @@ class SegmentComponent extends Component {
   get_room_temperature(option, user_email) {
     const roomkey = option.building.value.toLowerCase() + ':' + 
         option.building.value + '_Rm_' + option.room.value
-    axios.get('/point/temp/' + roomkey, {
+    axios.get('/api/point/temp/' + roomkey, {
     	params: {
 		user_email: user_email.data
 	}

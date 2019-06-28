@@ -17,7 +17,7 @@ class App extends Component {
             <Route exact path="/" component={Home} />
             <Route path="/main" component={Main} />
           <Route path='/login' component={() => {
-              window.location.href = 'https://bd-testbed.ucsd.edu:5000/log';
+              window.location.href = 'https://bd-testbed.ucsd.edu:5000/api/log';
               return null;
           }}/>
           </Switch>

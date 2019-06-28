@@ -14,7 +14,7 @@ class TopMenu extends Component {
     const {user_email} = props
     if(user_email != null) {
       if(user_email !== state.user_email) { 
-	axios.get('/user', {
+	axios.get('/api/user', {
 	    params: {
 		    user_email: user_email.data
 	    }
