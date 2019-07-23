@@ -5,7 +5,9 @@ import arrow
 
 from datetime import datetime, timedelta
 
-bs_url = 'https://bd-testbed.ucsd.edu:7889/api/v1'
+from configs import config
+
+bs_url = config['brickapi']['API_URL']
 upload_url = bs_url + '/entities/upload'
 sparql_url = bs_url + '/queries/sparql'
 entity_url = bs_url + '/entities'
@@ -15,21 +17,10 @@ ts_url = bs_url + '/data/timeseries'
 auth_url = bs_url + '/auth'
 actuation_url = bs_url + '/actuation'
 
-brick_version = '1.0.2'
-brick_prefix = 'https://brickschema.org/schema/' + brick_version + '/Brick#'
-ebu3b_prefix = 'http://ucsd.edu/building/ontology/ebu3b#'
-# PREFIX = """
-#     PREFIX ebu3b: <http://ucsd.edu/building/ontology/ebu3b#>
-# """
+brick_prefix = config['brick']['brick_prefix']
+ebu3b_prefix = config['brick']['building_prefix']
 
 production = False
-
-
-#with open('master_jwt_token', 'r') as fp:
-with open('genie_master_token', 'r') as fp:
-#with open('data_admin_jwt_token', 'r') as fp:
-#with open('VEnergy_master_token', 'r') as fp:
-    jwt_token = fp.read()
 
 def getHeader(jwt_token):
   return {

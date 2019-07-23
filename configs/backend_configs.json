@@ -1,0 +1,22 @@
+{
+    "ssl": {
+        "cert": "/datadrive/synergy/repo/genie-bricked/genie_ssl.crt",
+        "key": "/datadrive/synergy/repo/genie-bricked/genie_ssl.key"
+    },
+    "brickapi": {
+        "API_URL": "https://bd-testbed.ucsd.edu:7889/api/v1",
+        "AUTH_URL": "{API_URL}/auth/login/genie"
+    },
+    "google_oauth": {
+        "client_id": "lvAdQjr110DwFaq",
+        "client_secret": "q4feLWYjbzDk7QvPkQHmKjkF4"
+    },
+    "genie_index": "https://bd-testbed.ucsd.edu:11001",
+    "host": "0.0.0.0",
+    "port": "5000",
+    "brick": {
+        "brick_prefix": "https://brickschema.org/schema/1.0.2/Brick#",
+        "building_prefix": "http://ucsd.edu/building/ontology/ebu3b#"
+    }
+}
+

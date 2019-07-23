@@ -9,26 +9,22 @@ from flask import Flask, redirect, url_for, session, request, jsonify, g, json
 from flask_cors import CORS
 
 from api import json_response, get_user, query_sparql, query_actuation, query_data, query_entity_tagset, iterate_extract, get_zone_temperature_sensor, get_occupancy_command, get_temperature_setpoint, get_thermal_power_sensor
+from configs import config
+
+API_URL = config['brickapi']['API_URL']
+AUTH_URL = config['brickapi']['AUTH_URL'].format(API_URL=API_URL)
+INDEX_URL = config['genie_index']
 
 ebu3b_prefix = 'http://ucsd.edu/building/ontology/ebu3b#'
 mock_prefix = 'ebu3b:EBU3B_Rm_'
 
 production = False
 
-PORT = 7889
-APP = 'genie'
-
 REDIRECT_URI = '/oauth2callback'
-AUTH_URL = 'https://bd-testbed.ucsd.edu:{0}/api/v1/auth/login/{1}'.format(PORT, APP)
-INDEX_URL = 'https://bd-testbed.ucsd.edu:11001'
-
-API_URL = 'https://bd-testbed.ucsd.edu:{0}/api/v1'.format(PORT)
-
-cid = 'lvAdQjr110DwFaq'
-csec = 'q4feLWYjbzDk7QvPkQHmKjkF4'
+cid = config['google_oauth']['client_id']
+csec = config['google_oauth']['client_secret']
 
 app = Flask(__name__)
-#app.debug = True
 app.secret_key = os.urandom(24)
 CORS(app)
 
@@ -191,9 +187,8 @@ def get_current_user():
 
 
 if __name__ == '__main__':
-    ssl_context = ('/home/renxu/fullchain.pem',
-                   '/home/renxu/privkey.pem')
-    app.run(host='0.0.0.0',
-              port=5000,
-              ssl_context=ssl_context,
-           )
+    ssl_context = (config['ssl']['cert'], config['ssl']['key'])
+    app.run(host=config['host'],
+            port=config['port'],
+            ssl_context=ssl_context,
+            )
