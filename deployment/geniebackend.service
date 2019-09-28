@@ -1,0 +1,15 @@
+[Unit]
+Description=Genie Backend
+After=network.target
+
+
+[Service]
+User=synergy
+Group=www-data
+WorkingDirectory=/datadrive/synergy/deployment/genie-brickified
+Environment="PATH=/datadrive/synergy/deployment/genie-brickified/venv/bin"
+Environment="LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/datadrive/synergy/anaconda3/lib"
+ExecStart=/datadrive/synergy/deployment/genie-brickified/venv/bin/uwsgi --ini genie.ini
+
+[Install]
+WantedBy=multi-user.target
