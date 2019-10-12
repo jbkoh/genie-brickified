@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Grid, Icon, Header, Segment, Divider, Statistic, Message } from 'semantic-ui-react';
 import './Segment.css';
+import {getToken, getBrickHeaders} from '../BrickApi.js';
 import Bar from 'react-meter-bar';
+
 
 const WarningObject = ({icon, color, title, mobile}) => (
     <Segment  raised style={{minHeight: "204px"}} color="red">
@@ -106,11 +108,13 @@ class SegmentComponent extends Component {
   }
 
   get_energy_usage(option, user_email) {
-    const roomkey = option.building.value.toLowerCase() + ':' + 
-        option.building.value + '_Rm_' + option.room.value
+    //const roomkey = option.building.value.toLowerCase() + ':' +
+    //    option.building.value + '_Rm_' + option.room.value
+    const roomkey = option.room.value
     axios.get('/api/point/energy/' + roomkey, {
     	params: {
-		user_email: user_email.data
+		user_email: user_email.data,
+        headers: getBrickHeaders,
 	}
     })
         .then(res => {
@@ -118,7 +122,7 @@ class SegmentComponent extends Component {
                 && res.data != null 
                 && res.data['value'] != null) {
                 const resp = res.data;
-                this.setState({ energy_value: resp['value'],
+                this.setState({ energy_value: resp['value'].toFixed(2),
                                 energy_error: false });
             }
             else {
@@ -128,12 +132,14 @@ class SegmentComponent extends Component {
   }
 
   get_room_temperature(option, user_email) {
-    const roomkey = option.building.value.toLowerCase() + ':' + 
-        option.building.value + '_Rm_' + option.room.value
-    axios.get('/api/point/temp/' + roomkey, {
+    //const roomkey = option.building.value.toLowerCase() + ':' +
+    //    option.building.value + '_Rm_' + option.room.value
+    const roomkey = option.room.value
+    axios.get("/api/point/temp/" + roomkey, {
     	params: {
-		user_email: user_email.data
-	}
+		  user_email: user_email.data
+        },
+        headers: getBrickHeaders()
     })
         .then(res => {
             if(res != null 
@@ -198,7 +204,7 @@ class SegmentComponent extends Component {
         title={"Room Temperature"} mobile={this.props.mobile} />
     ) : (
         <SegmentObject icon={"thermometer"} color={"rgb(100, 234, 145)"} 
-        title={"Room Temperature"} value={temperature_value} label={"°F"} 
+        title={"Room Temperature"} value={temperature_value.toFixed(2)} label={"°F"}
         labels={mobile_labels} progress={temperature_progress}
         mobile={this.props.mobile} />
     );

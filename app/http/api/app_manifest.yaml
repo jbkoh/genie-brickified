@@ -1,8 +1,0 @@
-{
-  "name": "Genie",
-  "description": "Genie is a web thermostat.",
-  "permission_templates": {},
-  "callback_url": "http://bd-testbed.ucsd.edu:11001/main",
-  "client_id": "M35ALqsaWWLJMUy",
-  "client_secret": "LBKJDK8FzebqnSeIITOq5yE3w"
-}

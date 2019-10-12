@@ -1,7 +1,7 @@
 {
   "name": "genie_revamp",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "dependencies": {
     "axios": "^0.18.0",
     "faker": "^4.1.0",
@@ -22,12 +22,12 @@
     "semantic-ui-react": "^0.86.0"
   },
   "scripts": {
-    "start": "HTTPS=true PORT=11001 react-scripts start",
+    "start": "HTTPS=true PORT=11002 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "https://localhost:5000",
+  "proxy": "https://0.0.0.0:5000",
   "eslintConfig": {
     "extends": "react-app"
   },

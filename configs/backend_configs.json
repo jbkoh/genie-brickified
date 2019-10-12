@@ -1,22 +1,23 @@
 {
     "ssl": {
-        "cert": "/datadrive/synergy/repo/genie-bricked/genie_ssl.crt",
-        "key": "/datadrive/synergy/repo/genie-bricked/genie_ssl.key"
+        "cert": "/datadrive/synergy/repo/genie-brickified/genie_ssl.crt",
+        "key": "/datadrive/synergy/repo/genie-brickified/genie_ssl.key"
     },
     "brickapi": {
-        "API_URL": "https://bd-testbed.ucsd.edu:7889/api/v1",
+        "API_URL": "https://bd-testbed.ucsd.edu:9002/api/v1",
         "AUTH_URL": "{API_URL}/auth/login/genie"
     },
     "google_oauth": {
-        "client_id": "lvAdQjr110DwFaq",
-        "client_secret": "q4feLWYjbzDk7QvPkQHmKjkF4"
+        "client_id": "rygBa44odoKnzUr",
+        "client_secret": "tYUAlQYsDh6fI1CD46V50PLz7"
     },
-    "genie_index": "https://bd-testbed.ucsd.edu:11001",
+    "genie_index": "https://bd-testbed.ucsd.edu:11002",
     "host": "0.0.0.0",
     "port": "5000",
     "brick": {
-        "brick_prefix": "https://brickschema.org/schema/1.0.2/Brick#",
-        "building_prefix": "http://ucsd.edu/building/ontology/ebu3b#"
+        "brick_prefix": "https://brickschema.org/schema/1.1.0/Brick#",
+        "building_prefix_dep": "http://ucsd.edu/building/ontology/ebu3b#",
+        "building_prefix": "bldg:"
     }
 }
 

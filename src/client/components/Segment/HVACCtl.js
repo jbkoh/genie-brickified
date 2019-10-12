@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Grid, Icon, Header, Segment, Divider, Statistic, Button, Message } from 'semantic-ui-react';
 import './Segment.css';
+import {getBrickHeaders} from '../BrickApi.js';
 import Slider from 'react-input-slider';
 
 const WarningObject = ({icon, color, title, mobile}) => (
@@ -180,12 +181,14 @@ class SegmentComponent extends Component {
   }
 
   get_status(option, user_email) {
-    const roomkey = option.building.value.toLowerCase() + ':' + 
-        option.building.value + '_Rm_' + option.room.value
+    //const roomkey = option.building.value.toLowerCase() + ':' +
+    //    option.building.value + '_Rm_' + option.room.value
+    const roomkey = option.room.value
     axios.get('/api/point/status/' + roomkey, {
-    	params: {
+      params: {
 		user_email: user_email.data
-	}
+	  },
+      headers: getBrickHeaders(),
     })
         .then(res => {
             if(res != null 
@@ -202,12 +205,14 @@ class SegmentComponent extends Component {
   }
 
   get_temp_setpoint(option, user_email) {
-    const roomkey = option.building.value.toLowerCase() + ':' + 
-        option.building.value + '_Rm_' + option.room.value
+    //const roomkey = option.building.value.toLowerCase() + ':' +
+    //    option.building.value + '_Rm_' + option.room.value
+    const roomkey = option.room.value
     axios.get('/api/point/setpoint/' + roomkey, {
-    	params: {
+   	  params: {
 		user_email: user_email.data
-	}
+	  },
+      headers: getBrickHeaders(),
     })
         .then(res => {
             if(res != null 
@@ -224,12 +229,14 @@ class SegmentComponent extends Component {
   }
 
   set_status(option, status, numStatus, user_email) {
-    const roomkey = option.building.value.toLowerCase() + ':' + 
-        option.building.value + '_Rm_' + option.room.value
+    //const roomkey = option.building.value.toLowerCase() + ':' +
+    //    option.building.value + '_Rm_' + option.room.value
+    const roomkey = option.room.value
     axios.post('/api/point/status/' + roomkey, { value: status }, {
 	    params: {
 	    	user_email: user_email.data
-	    }
+	    },
+        headers: getBrickHeaders(),
     })
         .then(res => {
             this.setState({
@@ -243,12 +250,14 @@ class SegmentComponent extends Component {
   }
 
   set_temp_setpoint(option, temp, user_email) {
-    const roomkey = option.building.value.toLowerCase() + ':' + 
-        option.building.value + '_Rm_' + option.room.value
+    //const roomkey = option.building.value.toLowerCase() + ':' +
+    //    option.building.value + '_Rm_' + option.room.value
+    const roomkey = option.room.value
     axios.post('/api/point/setpoint/' + roomkey, { value: temp }, {
-    	params: {
+   	  params: {
 		user_email: user_email.data
-	}
+	  },
+      headers: getBrickHeaders(),
     })
         .then(function (response) {
             console.log(response);

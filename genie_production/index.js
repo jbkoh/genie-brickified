@@ -5,8 +5,10 @@ const httpProxy = require('http-proxy');
 const fs = require("fs");
 
 const options = {
-    cert: fs.readFileSync('/home/renxu/fullchain.pem'),
-    key: fs.readFileSync('/home/renxu/privkey.pem')
+    //cert: fs.readFileSync('/home/renxu/fullchain.pem'),
+    //key: fs.readFileSync('/home/renxu/privkey.pem')
+    cert: fs.readFileSync('./app/http/api/genie_ssl.crt'),
+    key: fs.readFileSync('./app/http/api/genie_ssl.key')
 };
 const proxy_url = 'https://0.0.0.0:5000'
 

@@ -7,6 +7,9 @@ import {
   Route,
   Switch,
 } from 'react-router-dom';
+import {
+    LOGIN_URL
+} from './config'
 
 class App extends Component {
   render() {
@@ -17,7 +20,7 @@ class App extends Component {
             <Route exact path="/" component={Home} />
             <Route path="/main" component={Main} />
           <Route path='/login' component={() => {
-              window.location.href = 'https://bd-testbed.ucsd.edu:5000/api/log';
+              window.location.href = LOGIN_URL;
               return null;
           }}/>
           </Switch>
