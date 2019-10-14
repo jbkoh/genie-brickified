@@ -22,12 +22,12 @@
     "semantic-ui-react": "^0.86.0"
   },
   "scripts": {
-    "start": "HTTPS=true PORT=11002 react-scripts start",
+    "start": "HTTPS=true PORT=11003 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "https://0.0.0.0:5000",
+  "proxy": "https://0.0.0.0:5001",
   "eslintConfig": {
     "extends": "react-app"
   },

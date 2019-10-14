@@ -5,6 +5,7 @@ import json, copy
 import arrow
 from datetime import datetime, timedelta
 
+from werkzeug import exceptions
 from flask import request
 
 from .configs import config
@@ -84,6 +85,8 @@ def query_data(uuid, app_token):
                         headers=getHeader(app_token),
                         verify=False,
                         )
+    if resp.status_code == 401:
+        raise exceptions.Unauthorized()
     print(resp.json())
     if resp.status_code != 200:
         return None
@@ -102,6 +105,8 @@ def query_actuation(uuid, value, app_token):
                          headers=getHeader(app_token),
                          verify=False,
                          )
+    if resp.status_code == 401:
+        raise exceptions.Unauthorized()
 
 
 def query_entity_tagset(uuid, jwt_token):
@@ -109,6 +114,8 @@ def query_entity_tagset(uuid, jwt_token):
                         headers=getHeader(jwt_token),
                         verify=False,
                         )
+    if resp.status_code == 401:
+        raise exceptions.Unauthorized()
     if resp.status_code != 200:
         return None    
     return resp.json()["type"]
@@ -149,6 +156,8 @@ def get_user(email, jwt_token):
                        headers=getHeader(jwt_token),
                        verify=False,
                        )
+    if res.status_code == 401:
+        raise exceptions.Unauthorized()
     if res.status_code == 200:
         return res.json()
     else:
