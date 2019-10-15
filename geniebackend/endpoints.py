@@ -111,8 +111,13 @@ def get_temp_setpoint(room):
     app_token = session['app_token']
     if not uuid:
         return json_response({'value': None})
-    value = query_data(uuid, app_token)
-    return json_response({'value': value})
+    try:
+        value = query_data(uuid, app_token)
+        resp = json_response({'value': value})
+    except exceptions.Unauthorized as e:
+        resp = json_response({'value': None,
+                              'status_code': 401})
+    return resp
 
 
 @app.route("/api/point/setpoint/<room>", methods=["POST"])
@@ -153,8 +158,13 @@ def get_status(room):
     if not uuid:
         return json_response({'value': None})
     app_token = session['app_token']
-    value = query_data(uuid, app_token)
-    return json_response({'value': value})
+    try:
+        value = query_data(uuid, app_token)
+        resp = json_response({'value': value})
+    except exceptions.Unauthorized as e:
+        resp = json_response({'value': None,
+                              'status_code': 401})
+    return resp
 
 
 @app.route("/api/point/status/<room>", methods=["POST"])

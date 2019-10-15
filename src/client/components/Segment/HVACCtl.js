@@ -5,7 +5,7 @@ import './Segment.css';
 import {getBrickHeaders} from '../BrickApi.js';
 import Slider from 'react-input-slider';
 
-const WarningObject = ({icon, color, title, mobile}) => (
+const WarningObject = ({icon, color, title, mobile, msg}) => (
     <Segment  raised style={{minHeight: "204px"}} color="red">
         <Grid>
             <Grid.Row>
@@ -35,7 +35,7 @@ const WarningObject = ({icon, color, title, mobile}) => (
                     }} >
                         <Message negative>
                             <Icon name='warning' />
-                            No Data Found
+                            {msg}
                         </Message>
                     </Grid.Row>
                 </Grid.Column>
@@ -189,19 +189,20 @@ class SegmentComponent extends Component {
 		user_email: user_email.data
 	  },
       headers: getBrickHeaders(),
-    })
-        .then(res => {
-            if(res != null 
-                && res.data != null 
-                && res.data['value'] != null) {
+    }).then(res => {
+            if (res.data.status_code === 401) {
+                console.log('NOT AUTHORIZED')
+                this.setState({status_error: 401});
+            } else if (res != null && res.data != null && res.data['value'] != null) {
+                console.log('EMPTY DATA')
                 const resp = res.data;
                 this.setState({ status: resp['value'],
-                                status_error: false });
+                                status_error: false});
             }
             else {
-                this.setState({ status_error: true });
+                this.setState({ status_error: 400 });
             }
-        })
+    })
   }
 
   get_temp_setpoint(option, user_email) {
@@ -215,15 +216,19 @@ class SegmentComponent extends Component {
       headers: getBrickHeaders(),
     })
         .then(res => {
-            if(res != null 
+            if (res.data.status_code === 401) {
+                console.log('NOT AUTHORIZED')
+                this.setState({setpoint_error: 401});
+            } else if(res != null
                 && res.data != null 
                 && res.data['value'] != null) {
                 const resp = res.data;
                 this.setState({ temperature: resp['value'],
-                                setpoint_error: false });
+                                setpoint_error: false});
             }
             else {
-                this.setState({ setpoint_error: true });
+                console.log('No Data')
+                this.setState({ setpoint_error: 400});
             }
         })
   }
@@ -299,6 +304,26 @@ class SegmentComponent extends Component {
 
   render() {
     const { status, temperature, loading, status_error, setpoint_error } = this.state;
+    var StatusPanel;
+    if (status_error === 401) {
+        StatusPanel = (
+        <WarningObject icon={"power off"} color={"rgb(143, 201, 251)"}
+        title={"Status"} mobile={this.props.mobile} msg={"Unauthorized"}/>
+        );
+    } else if (status_error === 400) {
+        StatusPanel = (
+        <WarningObject icon={"power off"} color={"rgb(143, 201, 251)"}
+        title={"Status"} mobile={this.props.mobile} msg={"No data found"}/>
+        //title={"Status"} mobile={this.props.mobile} />
+        );
+    } else {
+        StatusPanel = (
+            <SwitchObject icon={"power off"} color={"rgb(143, 201, 251)"}
+            title={"Status"} value={(status === 3) ? "ON" : "OFF"}
+            toggleStatus={this.toggleStatus} mobile={this.props.mobile} loading={loading} />
+        );
+    }
+      /*
     const StatusPanel = (status_error) ? (
         <WarningObject icon={"power off"} color={"rgb(143, 201, 251)"}
         title={"Status"} mobile={this.props.mobile} />
@@ -307,15 +332,25 @@ class SegmentComponent extends Component {
 	    title={"Status"} value={(status === 3) ? "ON" : "OFF"}
 	    toggleStatus={this.toggleStatus} mobile={this.props.mobile} loading={loading} />
     );              
-    const SetpointPanel  = (setpoint_error) ? (
+    */
+    var SetpointPanel;
+    if (setpoint_error === 401) {
+    	SetpointPanel = (
         <WarningObject icon={"thermometer quarter"} color={"rgb(248, 200, 46)"}
-        title={"Temperature"} mobile={this.props.mobile} />
-    ) : (                   
-    	<SegmentObject icon={"thermometer quarter"} color={"rgb(248, 200, 46)"} 
+        title={"Temperature"} mobile={this.props.mobile} msg={"Unauthorized"}/>
+        )
+    } else if (setpoint_error === 400) {
+    	SetpointPanel = (
+        <WarningObject icon={"thermometer quarter"} color={"rgb(248, 200, 46)"}
+        title={"Temperature"} mobile={this.props.mobile} msg={"No data found"}/>
+        )
+    } else {
+    	SetpointPanel = (
+            <SegmentObject icon={"thermometer quarter"} color={"rgb(248, 200, 46)"}
 	    title={"Temperature"} value={temperature} label={"°F"}
 	    handleChangeTemp={this.handleChangeTemp} mobile={this.props.mobile} />
-
-    );   
+        )
+    }
     return (
         <Grid container={this.props.mobile} stackable={this.props.mobile}>
             <Grid.Row>
