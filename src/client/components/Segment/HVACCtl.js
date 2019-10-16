@@ -287,19 +287,32 @@ class SegmentComponent extends Component {
     return null;
   }
 
+  get_ctrls(option, user_email) {
+      this.get_status(option, user_email);
+      this.get_temp_setpoint(option, user_email);
+  }
+
   componentDidMount(prevProps, prevState) {
     const { option, user_email } = this.props;
+    var intervalId;
     if(user_email != null) {
       if(typeof prevProps === 'undefined' || user_email !== prevProps.user_email) {
+          /*
 	this.get_status(option, user_email);
 	this.get_temp_setpoint(option, user_email);
+    */
+        intervalId = setInterval(this.get_ctrls.bind(this), 3000, option, user_email);
       }
     }
     else if(localStorage.getItem('user_id')) {
 	let user_id = JSON.parse(localStorage.getItem('user_id'))
+        intervalId = setInterval(this.get_ctrls.bind(this), 3000, option, user_id);
+          /*
 	this.get_status(option, user_id);
 	this.get_temp_setpoint(option, user_id);
+    */
     }
+    this.setState({intervalId: intervalId});
   }
 
   render() {

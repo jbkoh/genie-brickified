@@ -107,6 +107,12 @@ class SegmentComponent extends Component {
     this.get_room_temperature.bind(this)
   }
 
+  get_statuses(option, user_email) {
+    this.get_room_temperature(option, user_email);
+    this.get_energy_usage(option, user_email);
+  }
+
+
   get_energy_usage(option, user_email) {
     //const roomkey = option.building.value.toLowerCase() + ':' +
     //    option.building.value + '_Rm_' + option.room.value
@@ -172,17 +178,29 @@ class SegmentComponent extends Component {
 
   componentDidMount(prevProps, prevState) {
     const { option, user_email } = this.props;
+    var intervalId;
     if(user_email != null) {
       if(typeof prevProps === 'undefined' || user_email !== prevProps.user_email) {
+    //this.get_statuses(option, user_email);
+    intervalId = setInterval(this.get_statuses.bind(this), 3000, option, user_email);
+          /*
 	this.get_energy_usage(option, user_email);
 	this.get_room_temperature(option, user_email);
+    */
       }
     }
     else if(localStorage.getItem('user_id')) {
         let user_id = JSON.parse(localStorage.getItem('user_id'))
+    //this.get_statuses(option, user_id);
+    intervalId = setInterval(this.get_statuses.bind(this), 3000, option, user_id);
+        /*
 	this.get_energy_usage(option, user_id);
 	this.get_room_temperature(option, user_id);
+    */
+    } else {
+        console.log('THIS SHOULD NOT BE REACHED')
     }
+    this.setState({intervalId: intervalId});
   }
 
   render() {
